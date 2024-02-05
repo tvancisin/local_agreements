@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PeaceRep</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/d3.js" type="text/javascript"></script>
+    <script src="js/countries.js"></script>
+</head>
+
+<body>
+    <div id="header">
+        <img src="img/logo.png" alt="PeaceRep Logo" />
+        <h1 id="big_title">Local Peace Processes Map</h1>
+        <button class="button button1"><i class="fa fa-refresh" style="color:black"></i></button>
+        <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
+    </div>
+    <div id="info">
+        <div id="info_title_div">
+            <h2>Information</h2>
+        </div>
+        <div id="info_content">
+        </div>
+    </div>
+    <div id="description"></div>
+    <div id="map"></div>
+    <div id="peace_process">
+        <div id="peace_title_div">
+            <h2 id="peace_title"></h2>
+        </div>
+        <div id="additional_info">
+            <h4 id="process_stage"></h4>
+            <h4 id="agreement"></h4>
+            <div id="peace_content">
+                <h4 id="peace"></h4>
+                <h4>View agreement:</h4>
+            </div>
+        </div>
+    </div>
+    <div id="net-legend" class="legend">
+        <h4>Stages</h4>
+        <div id="one"><span style="background-color: #fbb03b"></span>Pre-negotiation</div>
+        <div id="two"><span style="background-color: #223b53"></span>Renewal</div>
+        <div id="three"><span style="background-color: #e55e5e"></span>Ceasefire</div>
+        <div id="four"><span style="background-color: #3bb2d0"></span>Framework-substantive, partial</div>
+        <div id="five"><span style="background-color: steelblue"></span>Implementation</div>
+        <div id="six"><span style="background-color: white"></span>Other</div>
+    </div>
+
+    <script>
+        //adapt to screen
+        let screen_height = window.innerHeight;
+        let screen_width = window.innerWidth;
+        d3.selectAll("#peace_process, #info")
+            .style("height", screen_height - 50 + "px")
+            .style("width", screen_width * 0.28 + "px")
+            .style("right", - screen_width * 0.30 + "px")
+        d3.select("#peace_content")
+            .style("height", screen_height / 2 - 42 + "px")
+            .style("width", screen_width * 0.28 + "px")
+        d3.selectAll("#peace_title_div, #info_title_div")
+            .style("width", screen_width * 0.28 + "px")
+        d3.select("#additional_info")
+            .style("width", screen_width * 0.28 + "px")
+        // info button
+        let counter_collab = 0;
+        d3.select("#info_button").on("click", function () {
+            counter_collab += 1;
+            d3.selectAll("#peace_process")
+                .transition().duration(800)
+                .style("right", - screen_width * 0.30 + "px")
+            if (counter_collab % 2 !== 0) {
+                d3.select("#info")
+                    .transition().duration(500)
+                    .style("right", 0 + "px")
+            }
+            else {
+                d3.select("#info")
+                    .transition().duration(500)
+                    .style("right", - screen_width * 0.30 + "px")
+            }
+        })
+        // load mapbox
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            // style: 'mapbox://styles/mapbox/dark-v11',
+            style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
+            center: [40.137343, 30.137451],
+            zoom: 3,
+            attributionControl: false
+        });
+
+        // load the data
+        Promise.all([
+            d3.csv("data/local.csv"),
+            d3.csv("data/loc_correction.csv"),
+            d3.csv("data/pax.csv"),
+        ]).then(function (files) {
+            //clean location names and add description
+            let raw_data = files[0]
+            function find_id(curr_id) {
+                let the_country = files[1].find(function (x) {
+                    return x.AgtId == curr_id
+                })
+                let the_category = files[2].find(function (x) {
+                    return x.AgtId == curr_id
+                })
+                return [the_country.country_entity, the_category]
+            }
+            raw_data.forEach(function (d) {
+                let curr_id = d.AgtId;
+                let the_country = find_id(curr_id)
+                d.Con = the_country[0];
+                d.stage = the_country[1].stage_label;
+                d.description = the_country[1].description;
+                d.agreement = the_country[1].Agt;
+            })
+            //construct unique country array
+            let country_array = []
+            raw_data.forEach((d) => {
+                if (country_array.includes(d.Con) == false) {
+                    country_array.push(d.Con)
+                }
+            })
+            // creating conflict geojson
+            let local_conflict_geojson = []
+            console.log(raw_data);
+            raw_data.forEach(function (d) {
+                let to_push = {
+                    'type': 'Feature',
+                    'properties': {
+                        'id': d.AgtId,
+                        'p_process': d.PPName,
+                        'text': d.LocaleName,
+                        'stage': d.stage,
+                        'description': d.description,
+                        'agreement': d.agreement,
+                        'link': d.LinkNatProcess
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [d.LongDec, d.LatDec]
+                    }
+                }
+                local_conflict_geojson.push(to_push)
+            })
+            const thaa = {
+                'type': 'FeatureCollection',
+                'features': local_conflict_geojson
+            };
+            let hoveredPolygonId = null;
+            //draw polygons
+            map.on('load', () => {
+                // Add a data source containing GeoJSON data.
+                map.addSource('states', {
+                    'type': 'geojson',
+                    'data': thaa,
+                    'generateId': true //This ensures that all features have unique IDs
+                });
+                //circles for agreements
+                map.addLayer(
+                    {
+                        'id': 'population',
+                        'type': 'circle',
+                        'source': 'states',
+                        'paint': {
+                            // Make circles larger as the user zooms from z12 to z22.
+                            // 'circle-radius': {
+                            //     'base': 1.75,
+                            //     'stops': [
+                            //         [12, 5],
+                            //         [22, 180]
+                            //     ]
+                            // },
+                            "circle-opacity": 0.7,
+                            "circle-stroke-width": 0.5,
+                            'circle-radius': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                10,
+                                6
+                            ],
+
+
+                            "circle-stroke-color": '#000',
+                            'circle-color':
+                                [
+                                    'match',
+                                    ['get', 'stage'],
+                                    'Pre-negotiation',
+                                    '#fbb03b',
+                                    'Renewal',
+                                    '#223b53',
+                                    'Ceasefire',
+                                    '#e55e5e',
+                                    'Framework-substantive, partial',
+                                    '#3bb2d0',
+                                    'Implementation',
+                                    'steelblue',
+                                    'Other',
+                                    'white',
+                                    'white'
+                                ]
+                        }
+                    },
+                    // Place polygons under labels, roads and buildings.
+                    // 'aeroway-polygon'
+                );
+
+                map.on('click', 'population', (e, i) => {
+                    map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
+                    const description = e.features[0].properties
+                    d3.select("#peace")
+                        .text(description.description)
+                    d3.select("#peace_title")
+                        .html(description.p_process)
+                    d3.select("#peace_process")
+                        .transition().duration(800)
+                        .style("right", 0 + "px")
+                    d3.select("#info")
+                        .transition().duration(500)
+                        .style("right", - screen_width * 0.30 + "px")
+                    counter_collab = 0;
+                    let title_height = $('#peace_title').height()
+                    d3.select("#additional_info")
+                        .style("top", title_height + 20 + "px")
+                    d3.select("#process_stage")
+                        .text("Stage of Process: " + description.stage)
+                    d3.select("#agreement")
+                        .text("Agreement: " + description.agreement)
+                })
+
+                map.on('mouseenter', 'population', (e) => {
+                    map.getCanvas().style.cursor = 'pointer';
+                    const description = e.features[0].properties
+                    if (e.features.length > 0) {
+                        if (hoveredPolygonId !== null) {
+                            map.setFeatureState(
+                                { source: 'states', id: hoveredPolygonId },
+                                { hover: false }
+                            );
+                            map.setFeatureState(
+                                { source: 'states', id: hoveredPolygonId },
+                                { hover: false }
+                            );
+                        }
+                        hoveredPolygonId = e.features[0].id;
+                        map.setFeatureState(
+                            { source: 'states', id: hoveredPolygonId },
+                            { hover: true }
+                        );
+                    }
+
+                    d3.select("#description")
+                        .style("display", "block")
+                        .style("left", e.point.x + 30 + "px")
+                        .style("top", e.point.y - 25 + "px")
+                        .html(description.agreement)
+                });
+
+                // Change it back to a pointer when it leaves.
+                map.on('mouseleave', 'population', () => {
+                    map.getCanvas().style.cursor = '';
+                    if (hoveredPolygonId !== null) {
+                        map.setFeatureState(
+                            { source: 'states', id: hoveredPolygonId },
+                            { hover: false }
+                        );
+                    }
+                    hoveredPolygonId = null;
+                    d3.select("#description")
+                        .style("display", "none")
+                });
+
+                // refresh everything
+                d3.select(".button").on("click", function (m) {
+                    map.flyTo({ center: [40.137343, 30.137451], zoom: 3 });
+                    // d3.select("#big_title").text("Conflict and Peace Process Map")
+                    d3.selectAll("#peace_process, #info")
+                        .transition().duration(800)
+                        .style("right", - screen_width * 0.30 + "px")
+                    counter_collab = 0;
+                })
+
+
+
+
+                // map.addSource('states', {
+                //     'type': 'geojson',
+                //     'data': geo_data,
+                //     'generateId': true //This ensures that all features have unique IDs
+                // });
+                // Add a new layer to visualize the polygon.
+                // map.addLayer({
+                //     'id': 'state-fills',
+                //     'type': 'fill',
+                //     'source': 'states',
+                //     'layout': {},
+                //     'paint': {
+                //         'fill-color': '#006297',
+                //         'fill-opacity': 0.5
+                //     },
+                //     'filter': ['in', 'ADMIN', ...country_array]
+
+                // });
+                // map.addLayer({
+                //     'id': 'outline',
+                //     'type': 'line',
+                //     'source': 'states',
+                //     'layout': {},
+                //     'paint': {
+                //         'line-color': 'black',
+                //         'line-width': [
+                //             'case',
+                //             ['boolean', ['feature-state', 'hover'], false],
+                //             2,
+                //             0.5
+                //         ],
+                //     }
+                // });
+
+                // for (const marker of raw_data) {
+                //     if (marker.LongDec !== "999") {
+                //         let coord = [marker.LongDec, marker.LatDec]
+                //         const el = document.createElement('div');
+                //         const width = 10;
+                //         const height = 10;
+                //         el.className = 'marker';
+                //         el.style.backgroundImage = `url(img/circle.png)`;
+                //         el.style.width = `${width}px`;
+                //         el.style.height = `${height}px`;
+                //         el.style.backgroundSize = '100%';
+                //         el.style.cursor = "pointer"
+
+                //         new mapboxgl.Marker(el)
+                //             .setLngLat(coord)
+                //             .addTo(map);
+                //     }
+                // }
+
+            })
+
+
+        });
+    </script>
+</body>
+
+</html>
