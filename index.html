@@ -20,7 +20,7 @@
 
 <body>
     <div id="header">
-        <img src="img/logo.png" alt="PeaceRep Logo" />
+        <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
         <h1 id="big_title">Local Peace Processes Map</h1>
         <button class="button button1"><i class="fa fa-refresh" style="color:black"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
@@ -39,11 +39,13 @@
             <h2 id="peace_title"></h2>
         </div>
         <div id="additional_info">
-            <h4 id="process_stage"></h4>
-            <h4 id="agreement"></h4>
+            <div id="process_stage"></div>
+            <div id="agreement"></div>
+            <h4>Description:</h4>
             <div id="peace_content">
-                <h4 id="peace"></h4>
-                <h4>View agreement:</h4>
+                <p id="peace"></p>
+                <h4>View agreement: <a id="linkie" target="_blank" href="https://dennikn.sk/"><img src="img/agt_icon.svg"
+                            alt="HTML tutorial" style="height:20px;"></a></h4>
             </div>
         </div>
     </div>
@@ -62,11 +64,11 @@
         let screen_height = window.innerHeight;
         let screen_width = window.innerWidth;
         d3.selectAll("#peace_process, #info")
-            .style("height", screen_height - 50 + "px")
+            .style("height", screen_height - 70 + "px")
             .style("width", screen_width * 0.28 + "px")
             .style("right", - screen_width * 0.30 + "px")
         d3.select("#peace_content")
-            .style("height", screen_height / 2 - 42 + "px")
+            .style("height", screen_height / 2 + "px")
             .style("width", screen_width * 0.28 + "px")
         d3.selectAll("#peace_title_div, #info_title_div")
             .style("width", screen_width * 0.28 + "px")
@@ -122,9 +124,11 @@
                 let curr_id = d.AgtId;
                 let the_country = find_id(curr_id)
                 d.Con = the_country[0];
+                console.log(the_country[1]);
                 d.stage = the_country[1].stage_label;
                 d.description = the_country[1].description;
                 d.agreement = the_country[1].Agt;
+                d.linkie = the_country[1].PAX_Generate_PDF
             })
             //construct unique country array
             let country_array = []
@@ -146,7 +150,7 @@
                         'stage': d.stage,
                         'description': d.description,
                         'agreement': d.agreement,
-                        'link': d.LinkNatProcess
+                        'link': d.linkie
                     },
                     'geometry': {
                         'type': 'Point',
@@ -221,10 +225,6 @@
                 map.on('click', 'population', (e, i) => {
                     map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
                     const description = e.features[0].properties
-                    d3.select("#peace")
-                        .text(description.description)
-                    d3.select("#peace_title")
-                        .html(description.p_process)
                     d3.select("#peace_process")
                         .transition().duration(800)
                         .style("right", 0 + "px")
@@ -232,13 +232,20 @@
                         .transition().duration(500)
                         .style("right", - screen_width * 0.30 + "px")
                     counter_collab = 0;
+
+                    d3.select("#peace_title")
+                        .html(description.p_process)
                     let title_height = $('#peace_title').height()
                     d3.select("#additional_info")
                         .style("top", title_height + 20 + "px")
                     d3.select("#process_stage")
-                        .text("Stage of Process: " + description.stage)
+                        .html(`<h4>Stage of Process: </h4>` + `<p>` + description.stage + `</p>`)
                     d3.select("#agreement")
-                        .text("Agreement: " + description.agreement)
+                        .html(`<h4>Agreement: </h4>` + `<p>` + description.agreement + `</p>`)
+                    d3.select("#peace")
+                        .text(description.description)
+                    $("#linkie").attr('href', description.link);
+
                 })
 
                 map.on('mouseenter', 'population', (e) => {

@@ -63,7 +63,7 @@ body {
     z-index: 900;
 }
 
-img {
+#title_img {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -80,7 +80,7 @@ h2 {
 }
 
 h4 {
-    margin-top: 0px;
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 
@@ -262,7 +262,7 @@ pre a:-webkit-any-link {
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     position: absolute;
-    top: 46px;
+    top: 47px;
     z-index: 900;
     border-radius: 5px;
     padding: 10px;
@@ -294,4 +294,9 @@ pre a:-webkit-any-link {
 #additional_info{
     position: absolute;
     padding: 5px;
+}
+
+p {
+    margin: 0px;
+    font-size: 14px;
 }
