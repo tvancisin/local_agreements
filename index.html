@@ -50,13 +50,13 @@
         </div>
     </div>
     <div id="net-legend" class="legend">
-        <h4>Stages</h4>
-        <div id="one"><span style="background-color: #fbb03b"></span>Pre-negotiation</div>
-        <div id="two"><span style="background-color: #223b53"></span>Renewal</div>
-        <div id="three"><span style="background-color: #e55e5e"></span>Ceasefire</div>
-        <div id="four"><span style="background-color: #3bb2d0"></span>Framework-substantive, partial</div>
-        <div id="five"><span style="background-color: steelblue"></span>Implementation</div>
-        <div id="six"><span style="background-color: white"></span>Other</div>
+        <h4>Filter by Stages</h4>
+        <div id="one"><span style="background-color: #fbb03b; cursor: pointer;"></span>Pre-negotiation</div>
+        <div id="two"><span style="background-color: #223b53; cursor: pointer;"></span>Renewal</div>
+        <div id="three"><span style="background-color: #e55e5e; cursor: pointer;"></span>Ceasefire</div>
+        <div id="four"><span style="background-color: #3bb2d0; cursor: pointer;"></span>Framework-substantive, partial</div>
+        <div id="five"><span style="background-color: steelblue; cursor: pointer;"></span>Implementation</div>
+        <div id="six"><span style="background-color: white; cursor: pointer;"></span>Other</div>
     </div>
 
     <script>
@@ -124,7 +124,6 @@
                 let curr_id = d.AgtId;
                 let the_country = find_id(curr_id)
                 d.Con = the_country[0];
-                console.log(the_country[1]);
                 d.stage = the_country[1].stage_label;
                 d.description = the_country[1].description;
                 d.agreement = the_country[1].Agt;
@@ -248,6 +247,25 @@
 
                 })
 
+                d3.select("#one").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Pre-negotiation']);
+                })
+                d3.select("#two").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Renewal']);
+                })
+                d3.select("#three").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Ceasefire']);
+                })
+                d3.select("#four").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Framework-substantive, partial']);
+                })
+                d3.select("#five").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Implementation']);
+                })
+                d3.select("#six").on("click", function(d){
+                    map.setFilter('population', ['==', 'stage', 'Other']);
+                })
+
                 map.on('mouseenter', 'population', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
                     const description = e.features[0].properties
@@ -298,6 +316,7 @@
                         .transition().duration(800)
                         .style("right", - screen_width * 0.30 + "px")
                     counter_collab = 0;
+                    map.setFilter('population', null)
                 })
 
 
