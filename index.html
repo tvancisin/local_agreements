@@ -22,9 +22,10 @@
     <div id="header">
         <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
         <h1 id="big_title">Local Peace Processes Map</h1>
-        <button class="button button1"><i class="fa fa-refresh" style="color:black"></i></button>
+        <button id="refresh_button"><i class="fa fa-refresh" style="color:black"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
     </div>
+
     <div id="info">
         <div id="info_title_div">
             <h2>Information</h2>
@@ -32,29 +33,35 @@
         <div id="info_content">
         </div>
     </div>
-    <div id="description"></div>
+
     <div id="map"></div>
+
+    <div id="description"></div>
+
     <div id="peace_process">
-        <div id="peace_title_div">
-            <h2 id="peace_title"></h2>
-        </div>
-        <div id="additional_info">
+        <div id="peace_title_div" class="third">
+            <h3 id="peace_title"></h3>
             <div id="process_stage"></div>
             <div id="agreement"></div>
-            <h4>Description:</h4>
-            <div id="peace_content">
-                <p id="peace"></p>
-                <h4>View agreement: <a id="linkie" target="_blank" href="https://dennikn.sk/"><img src="img/agt_icon.svg"
-                            alt="HTML tutorial" style="height:20px;"></a></h4>
-            </div>
+        </div>
+        <div id="peace_content" class="third">
+            <h5 style="margin-left: 10px;">Description: </h5>
+            <p id="peace"></p>
+            <p id="peace">View agreement: <a id="linkie" target="_blank" href="https://dennikn.sk/"><img
+                        src="img/agt_icon.svg" alt="HTML tutorial" style="height:20px;"></a></p>
+        </div>
+        <div id="timeline" class="third">
+            <h5 id="time_title" style="margin-left: 10px;">Timelines: </h5>
         </div>
     </div>
+
     <div id="net-legend" class="legend">
-        <h4>Filter by Stages</h4>
+        <h4 id="filter_title">Filter by Stages</h4>
         <div id="one"><span style="background-color: #fbb03b; cursor: pointer;"></span>Pre-negotiation</div>
         <div id="two"><span style="background-color: #223b53; cursor: pointer;"></span>Renewal</div>
         <div id="three"><span style="background-color: #e55e5e; cursor: pointer;"></span>Ceasefire</div>
-        <div id="four"><span style="background-color: #3bb2d0; cursor: pointer;"></span>Framework-substantive, partial</div>
+        <div id="four"><span style="background-color: #3bb2d0; cursor: pointer;"></span>Framework-substantive, partial
+        </div>
         <div id="five"><span style="background-color: steelblue; cursor: pointer;"></span>Implementation</div>
         <div id="six"><span style="background-color: white; cursor: pointer;"></span>Other</div>
     </div>
@@ -63,17 +70,39 @@
         //adapt to screen
         let screen_height = window.innerHeight;
         let screen_width = window.innerWidth;
+        let details_height = screen_height - 50;
+
+        const margin = { top: 20, right: 20, bottom: 35, left: 25 },
+            width = screen_width * 0.28 - margin.left - margin.right,
+            height = details_height / 3 - margin.top - margin.bottom,
+            the_height = height - 20
+
+        // append the svg object to the body of the page
+        const svg = d3.select("#timeline")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", the_height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        svg.append("g")
+            .attr("class", "myXaxis")
+        svg.append("g")
+            .attr("class", "myYaxis")
+
+        const x_scale = d3.scaleTime()
+            .range([0, width])
+
+        const y = d3.scaleLinear()
+            .domain([0, 5])
+            .range([the_height, 0]);
+
         d3.selectAll("#peace_process, #info")
-            .style("height", screen_height - 70 + "px")
+            .style("height", details_height + "px")
             .style("width", screen_width * 0.28 + "px")
             .style("right", - screen_width * 0.30 + "px")
-        d3.select("#peace_content")
-            .style("height", screen_height / 2 + "px")
-            .style("width", screen_width * 0.28 + "px")
-        d3.selectAll("#peace_title_div, #info_title_div")
-            .style("width", screen_width * 0.28 + "px")
-        d3.select("#additional_info")
-            .style("width", screen_width * 0.28 + "px")
+        d3.selectAll(".third")
+            .style("height", (details_height - 16) / 3 + "px")
         // info button
         let counter_collab = 0;
         d3.select("#info_button").on("click", function () {
@@ -111,6 +140,12 @@
         ]).then(function (files) {
             //clean location names and add description
             let raw_data = files[0]
+            let parseDate = d3.timeParse("%d-%m-%Y");
+            raw_data.forEach(function (o) {
+                o.Dat = o.Dat.replace(/\//g, '-')
+                o.Dat = parseDate(o.Dat)
+            })
+
             function find_id(curr_id) {
                 let the_country = files[1].find(function (x) {
                     return x.AgtId == curr_id
@@ -138,7 +173,6 @@
             })
             // creating conflict geojson
             let local_conflict_geojson = []
-            console.log(raw_data);
             raw_data.forEach(function (d) {
                 let to_push = {
                     'type': 'Feature',
@@ -226,7 +260,7 @@
                     const description = e.features[0].properties
                     d3.select("#peace_process")
                         .transition().duration(800)
-                        .style("right", 0 + "px")
+                        .style("right", 3 + "px")
                     d3.select("#info")
                         .transition().duration(500)
                         .style("right", - screen_width * 0.30 + "px")
@@ -234,35 +268,99 @@
 
                     d3.select("#peace_title")
                         .html(description.p_process)
-                    let title_height = $('#peace_title').height()
-                    d3.select("#additional_info")
-                        .style("top", title_height + 20 + "px")
                     d3.select("#process_stage")
-                        .html(`<h4>Stage of Process: </h4>` + `<p>` + description.stage + `</p>`)
+                        .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
                     d3.select("#agreement")
-                        .html(`<h4>Agreement: </h4>` + `<p>` + description.agreement + `</p>`)
+                        .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + `</p>`)
                     d3.select("#peace")
-                        .text(description.description)
+                        .html(description.description)
                     $("#linkie").attr('href', description.link);
 
+                    //timeline
+                    let peace_instance = d3.groups(raw_data, function (r) {
+                        return r.PPName == description.p_process
+                    })
+                    let peace_data = peace_instance[1][1];
+                    function sortByDateAscending(a, b) {
+                        return a.Dat - b.Dat;
+                    }
+                    let the_data = peace_data.sort(sortByDateAscending);
+                    let almost_final = d3.groups(the_data, function (r) {
+                        return r.Dat
+                    })
+                    let first_year = almost_final[0][0]
+                    let last_year = almost_final[almost_final.length - 1][0]
+                    x_scale.domain([first_year, last_year])
+
+                    svg.selectAll(".myXaxis").transition().duration(500)
+                        .attr("transform", "translate(0," + the_height + ")")
+                        .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).ticks(5))
+                        .selectAll("text")
+                        .style("font-family", "Montserrat")
+                        // .attr("transform", "translate(-10,0)rotate(-45)")
+                        .style("text-anchor", "middle");
+
+                    svg.selectAll(".myYaxis")
+                        .call(d3.axisLeft(y).tickSize(-width).ticks(3))
+                        .style("stroke-dasharray", "10, 5")
+                        .selectAll("text")
+                        .style("font-family", "Montserrat")
+
+                    console.log(almost_final);
+
+                    svg.selectAll(".mybar")
+                        .data(almost_final, d => d)
+                        .join(
+                            enter => enter.append("rect")
+                                .attr("class", "mybar")
+                                .attr("x", d => x_scale(d[0]))
+                                .attr("y", the_height)
+                                .attr("rx", 3)
+                                .attr("height", 0)
+                                .attr("width", 1)
+                                .attr("fill", "white")
+                                .transition().duration(1000)
+                                .attr("y", function (d) {
+                                    return y(d[1].length)
+                                })
+                                .attr("height", d => the_height - y(d[1].length))
+                                .selection(),
+                            update => update
+                                .transition().duration(1000)
+                                .attr("x", d => x_scale(d[0]))
+                                .attr("y", function (d) {
+                                    return y(d[1].length)
+                                })
+                                .attr("width", 1)
+                                .attr("height", d => the_height - y(d[1].length))
+                                .selection(),
+                            exit => exit
+                                .transition().duration(500)
+                                .attr("y", the_height)
+                                .attr("height", 0)
+                                .remove()
+                        )
+
+                    d3.selectAll(".domain")
+                        .attr("visibility", "hidden")
                 })
 
-                d3.select("#one").on("click", function(d){
+                d3.select("#one").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Pre-negotiation']);
                 })
-                d3.select("#two").on("click", function(d){
+                d3.select("#two").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Renewal']);
                 })
-                d3.select("#three").on("click", function(d){
+                d3.select("#three").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Ceasefire']);
                 })
-                d3.select("#four").on("click", function(d){
+                d3.select("#four").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Framework-substantive, partial']);
                 })
-                d3.select("#five").on("click", function(d){
+                d3.select("#five").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Implementation']);
                 })
-                d3.select("#six").on("click", function(d){
+                d3.select("#six").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Other']);
                 })
 
@@ -309,7 +407,7 @@
                 });
 
                 // refresh everything
-                d3.select(".button").on("click", function (m) {
+                d3.select("#refresh_button").on("click", function (m) {
                     map.flyTo({ center: [40.137343, 30.137451], zoom: 3 });
                     // d3.select("#big_title").text("Conflict and Peace Process Map")
                     d3.selectAll("#peace_process, #info")
@@ -318,9 +416,6 @@
                     counter_collab = 0;
                     map.setFilter('population', null)
                 })
-
-
-
 
                 // map.addSource('states', {
                 //     'type': 'geojson',

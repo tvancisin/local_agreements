@@ -17,14 +17,14 @@ body {
     bottom: 0px;
 }
 
-/* .map-overlay {
+.map-overlay {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
     width: 25%;
     top: 0;
     left: 0;
     padding: 10px;
-} */
+}
 
 .map-overlay .map-overlay-inner {
     background-color: #fff;
@@ -70,21 +70,25 @@ body {
     height: 45px;
 }
 
-h2 {
+h3 {
     color: white;
-    border-radius: 3px;
     margin: auto;
     background-color: #091f40;
-    font-size: 22px;
+    padding: 10px;
+    text-align: center;
+}
+
+#process_stage,
+#agreement {
     padding: 5px;
 }
 
-h4 {
-    margin-top: 10px;
+h5 {
+    margin-top: 5px;
     margin-bottom: 5px;
 }
 
-.button {
+#refresh_button {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -100,11 +104,29 @@ h4 {
     cursor: pointer;
 }
 
-.button1:hover {
-    background-color: red;
-    color: white;
+#refresh_button:hover {
+    background-color: #006297
 }
 
+#info_button {
+    position: absolute;
+    top: 5px;
+    right: 70px;
+    background-color: #04AA6D;
+    border: none;
+    color: black;
+    padding: 5px 20px;
+    text-align: center;
+    font-size: 20px;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+#info_button:hover {
+    background-color: #006297
+}
 
 pre {
     margin-top: 2px;
@@ -123,49 +145,6 @@ h1 {
     margin: auto;
 }
 
-#peace_title_div,
-#info_title_div
-{
-text-align: center;
-position: fixed;
-border-radius: 5px;
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    /* box-shadow: inset 0 0 5px grey; */
-    border-radius: 3px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: rgb(255, 255, 255);
-    border-radius: 3px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #b30000;
-}
-
-#dropdown {
-    position: absolute;
-    top: 5px;
-    right: 68.58px;
-    height: 33.2px;
-    color: white;
-    background: #091f40;
-    border: none;
-    border-radius: 3px;
-    font-family: 'Montserrat';
-    font-size: 15px;
-}
-
 a:-webkit-any-link:hover {
     color: red;
     background-color: transparent;
@@ -177,33 +156,6 @@ pre a:-webkit-any-link {
     cursor: pointer;
 }
 
-#gradient {
-    position: absolute;
-    bottom: 40px;
-    right: 50px;
-    height: 50px;
-}
-
-.legendTitle {
-    font-size: 15px;
-    fill: #4F4F4F;
-    font-weight: 12;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: none;
-    /*black;*/
-    shape-rendering: crispEdges;
-}
-
-.axis text {
-    font-family: "Montserrat";
-    fill: white;
-    font-size: 9pt;
-}
-
 #update {
     font-size: 12px;
     color: white;
@@ -211,7 +163,6 @@ pre a:-webkit-any-link {
     bottom: 5px;
     right: 50px;
 }
-
 
 .legend {
     position: relative;
@@ -237,42 +188,42 @@ pre a:-webkit-any-link {
     width: 10px;
 }
 
-#info_button {
-    position: absolute;
-    top: 5px;
-    right: 70px;
-    background-color: #04AA6D;
-    border: none;
-    color: black;
-    padding: 5px 20px;
-    text-align: center;
-    font-size: 20px;
-    display: inline-block;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 2px;
-}
 
-#info_button:hover {
-    background-color: #006297
-}
-
-#peace_process, #info {
-    overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.6);
+#peace_process,
+#info {
+    overflow: hidden;
+    background-color: black;
     color: white;
     position: absolute;
     top: 47px;
     z-index: 900;
     border-radius: 5px;
-    padding: 10px;
+    padding: 0px;
 }
 
 #info_content,
 #peace_content {
-    /* position: absolute; */
     overflow-y: auto;
-    /* bottom: 5px; */
+    border-radius: 5px;
+}
+
+#peace_content::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#peace_content::-webkit-scrollbar-track {
+    background: #515151;
+}
+
+/* Handle */
+#peace_content::-webkit-scrollbar-thumb {
+    background: white;
+}
+
+/* Handle on hover */
+#peace_content::-webkit-scrollbar-thumb:hover {
+    background: rgb(230, 103, 103);
 }
 
 #description {
@@ -291,12 +242,41 @@ pre a:-webkit-any-link {
     opacity: 0.8;
 }
 
-#additional_info{
-    position: absolute;
-    padding: 5px;
-}
-
 p {
     margin: 0px;
     font-size: 14px;
+}
+
+#filter_title {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+#peace {
+    padding: 10px;
+}
+
+.third {
+    background-color: rgb(27, 27, 27);
+    border-radius: 5px;
+    margin: 4px;
+}
+
+.tick line {
+    stroke: rgb(255, 255, 255);
+    opacity: 0.1;
+}
+
+.white-axis {
+    fill: white;
+}
+
+.myXaxis path {
+    visibility: hidden;
+}
+
+#time_title {
+    position: relative;
+    top: 5px;
 }
