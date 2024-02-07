@@ -70,6 +70,13 @@ body {
     height: 45px;
 }
 
+#local_img {
+    position: absolute;
+    top: 0px;
+    left: 150px;
+    height: 45px;
+}
+
 h3 {
     color: white;
     margin: auto;
