@@ -183,9 +183,9 @@ pre a:-webkit-any-link {
 .legend div span {
     border-radius: 50%;
     display: inline-block;
-    height: 10px;
+    height: 13px;
     margin-right: 5px;
-    width: 10px;
+    width: 13px;
 }
 
 
@@ -265,7 +265,7 @@ p {
 
 .tick line {
     stroke: rgb(255, 255, 255);
-    opacity: 0.3;
+    opacity: 0.2;
 }
 
 .white-axis {

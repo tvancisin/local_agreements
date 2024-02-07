@@ -22,7 +22,7 @@
 <body>
     <div id="header">
         <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
-        <h1 id="big_title">Local Peace Processes Map</h1>
+        <h1 id="big_title">PA-X LOCAL AGREEMENTS</h1>
         <button id="refresh_button"><i class="fa fa-refresh" style="color:black"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
     </div>
@@ -76,7 +76,7 @@
         const margin = { top: 20, right: 20, bottom: 35, left: 25 },
             width = screen_width * 0.28 - margin.left - margin.right,
             height = details_height / 3 - margin.top - margin.bottom,
-            the_height = height - 25;
+            the_height = height - 10;
 
 
         // append the svg object to the body of the page
@@ -136,7 +136,7 @@
             container: 'map',
             // style: 'mapbox://styles/mapbox/dark-v11',
             style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
-            center: [40.137343, 30.137451],
+            center: [40.137343, 25.137451],
             zoom: 3,
             attributionControl: false
         });
@@ -220,23 +220,16 @@
                         'type': 'circle',
                         'source': 'states',
                         'paint': {
-                            // Make circles larger as the user zooms from z12 to z22.
-                            // 'circle-radius': {
-                            //     'base': 1.75,
-                            //     'stops': [
-                            //         [12, 5],
-                            //         [22, 180]
-                            //     ]
-                            // },
                             "circle-opacity": 0.7,
-                            "circle-stroke-width": 0.5,
-                            'circle-radius': [
+                            "circle-stroke-width": 1,
+                            'circle-radius': 7,
+                            "circle-stroke-color": 
+                            [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
-                                10,
-                                7
+                                'white',
+                                'black' 
                             ],
-                            "circle-stroke-color": '#000',
                             'circle-color':
                                 [
                                     'match',
@@ -264,6 +257,7 @@
                 map.on('click', 'population', (e, i) => {
                     map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
                     const description = e.features[0].properties
+                    console.log(description);
                     d3.select("#peace_process")
                         .transition().duration(800)
                         .style("right", 3 + "px")
@@ -331,32 +325,39 @@
                         .attr('cx', d => d.x)
                         .attr('cy', d => d.y)
                         .attr("class", "my_circles")
-                        .attr('r', 8)
+                        .attr('r', function (d) {
+                            return 8
+                        })
                         .style('fill', function (d) {
-                            let color_choice;
-                            switch (d[1][0][1][0].stage) {
-                                case "Pre-negotiation":
-                                    color_choice = '#fbb03b';
-                                    break;
-                                case "Renewal":
-                                    color_choice = '#223b53'
-                                    break;
-                                case "Ceasefire":
-                                    color_choice = '#e55e5e'
-                                    break;
-                                case "Framework-substantive, partial":
-                                    color_choice = '#3bb2d0'
-                                    break;
-                                case "Implementation":
-                                    color_choice = 'steelblue'
-                                    break;
-                                case "Other":
-                                    color_choice = 'white'
-                                    break;
-                                default:
-                                    color_choice = 'white'
+                            if (d[1][0][1][0].AgtId == description.id) {
+                                return "#fed800"
                             }
-                            return color_choice
+                            else {
+                                return "steelblue"
+                            }
+                            // switch (d[1][0][1][0].stage) {
+                            //     case "Pre-negotiation":
+                            //         color_choice = '#fbb03b';
+                            //         break;
+                            //     case "Renewal":
+                            //         color_choice = '#223b53'
+                            //         break;
+                            //     case "Ceasefire":
+                            //         color_choice = '#e55e5e'
+                            //         break;
+                            //     case "Framework-substantive, partial":
+                            //         color_choice = '#3bb2d0'
+                            //         break;
+                            //     case "Implementation":
+                            //         color_choice = 'steelblue'
+                            //         break;
+                            //     case "Other":
+                            //         color_choice = 'white'
+                            //         break;
+                            //     default:
+                            //         color_choice = 'white'
+                            // }
+                            // return color_choice
                         })
                         .style('stroke', "black")
 
@@ -481,7 +482,7 @@
 
                 // refresh everything
                 d3.select("#refresh_button").on("click", function (m) {
-                    map.flyTo({ center: [40.137343, 30.137451], zoom: 3 });
+                    map.flyTo({ center: [40.137343, 25.137451], zoom: 3 });
                     // d3.select("#big_title").text("Conflict and Peace Process Map")
                     d3.selectAll("#peace_process, #info")
                         .transition().duration(800)
