@@ -14,6 +14,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/png" href="img/peace.png">
     <script src="js/d3.js" type="text/javascript"></script>
     <script src="js/countries.js"></script>
 </head>
@@ -51,7 +52,7 @@
                         src="img/agt_icon.svg" alt="HTML tutorial" style="height:20px;"></a></p>
         </div>
         <div id="timeline" class="third">
-            <h5 id="time_title" style="margin-left: 10px;">Timelines: </h5>
+            <h5 id="time_title" style="margin-left: 10px;">Timeline: </h5>
         </div>
     </div>
 
@@ -75,7 +76,8 @@
         const margin = { top: 20, right: 20, bottom: 35, left: 25 },
             width = screen_width * 0.28 - margin.left - margin.right,
             height = details_height / 3 - margin.top - margin.bottom,
-            the_height = height - 20
+            the_height = height - 25;
+
 
         // append the svg object to the body of the page
         const svg = d3.select("#timeline")
@@ -97,10 +99,17 @@
             .domain([0, 5])
             .range([the_height, 0]);
 
+        let simulation = d3.forceSimulation()
+            .force("x", d3.forceX(function (d) { return x_scale(d[1][0][0]); }).strength(3))
+            .force("y", d3.forceY((the_height) / 2))
+            .force("collide", d3.forceCollide(8))
+            .stop();
+
         d3.selectAll("#peace_process, #info")
             .style("height", details_height + "px")
             .style("width", screen_width * 0.28 + "px")
             .style("right", - screen_width * 0.30 + "px")
+
         d3.selectAll(".third")
             .style("height", (details_height - 16) / 3 + "px")
         // info button
@@ -145,7 +154,6 @@
                 o.Dat = o.Dat.replace(/\//g, '-')
                 o.Dat = parseDate(o.Dat)
             })
-
             function find_id(curr_id) {
                 let the_country = files[1].find(function (x) {
                     return x.AgtId == curr_id
@@ -228,8 +236,6 @@
                                 10,
                                 7
                             ],
-
-
                             "circle-stroke-color": '#000',
                             'circle-color':
                                 [
@@ -280,66 +286,133 @@
                     let peace_instance = d3.groups(raw_data, function (r) {
                         return r.PPName == description.p_process
                     })
-                    let peace_data = peace_instance[1][1];
+                    let true_data;
+                    if (peace_instance[0][0] == true) {
+                        true_data = peace_instance[0][1]
+                    }
+                    else {
+                        true_data = peace_instance[1][1]
+                    }
+                    let peace_data = true_data;
                     function sortByDateAscending(a, b) {
                         return a.Dat - b.Dat;
                     }
                     let the_data = peace_data.sort(sortByDateAscending);
-                    let almost_final = d3.groups(the_data, function (r) {
-                        return r.Dat
-                    })
-                    let first_year = almost_final[0][0]
-                    let last_year = almost_final[almost_final.length - 1][0]
-                    x_scale.domain([first_year, last_year])
+                    let year_division = d3.groups(the_data, d => d.AgtId, d => d.Dat)
+                    x_scale.domain(d3.extent(year_division, function (d) { return d[1][0][0]; }))
+                        .nice();
+                    simulation.nodes(year_division)
+                    simulation.alpha(1).restart().tick();
 
+                    // let simulation = d3.forceSimulation(year_division)
+                    //     .force("x", d3.forceX(function (d) { return x_scale(d[1][0][0]); }).strength(3))
+                    //     .force("y", d3.forceY((the_height) / 2))
+                    //     .force("collide", d3.forceCollide(8))
+                    //     .stop();
+
+                    for (var i = 0; i < 200; ++i) { simulation.tick(); }
+                    const delaunay = d3.Delaunay.from(year_division, d => d.x, d => d.y),
+                        voronoi = delaunay.voronoi([0, 0, width, the_height]);
+                    //drawing x axis
                     svg.selectAll(".myXaxis").transition().duration(500)
                         .attr("transform", "translate(0," + the_height + ")")
-                        .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).ticks(5))
+                        .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).tickSize(-height).ticks(5))
+                        .style("stroke-dasharray", "5 5")
                         .selectAll("text")
-                        .style("font-family", "Montserrat")
-                        // .attr("transform", "translate(-10,0)rotate(-45)")
-                        .style("text-anchor", "middle");
+                        .attr("transform", "translate(0,-4)")
+                        .style("fill", "white")
+                        .style("text-anchor", "middle")
+                        .style("font-size", "12px")
+                        .style("font-family", "Montserrat");
 
-                    svg.selectAll(".myYaxis")
-                        .call(d3.axisLeft(y).tickSize(-width).ticks(3))
-                        .style("stroke-dasharray", "10, 5")
-                        .selectAll("text")
-                        .style("font-family", "Montserrat")
+                    svg.selectAll('.my_circles')
+                        .data(year_division)
+                        .join('circle')
+                        .attr('cx', d => d.x)
+                        .attr('cy', d => d.y)
+                        .attr("class", "my_circles")
+                        .attr('r', 8)
+                        .style('fill', function (d) {
+                            let color_choice;
+                            switch (d[1][0][1][0].stage) {
+                                case "Pre-negotiation":
+                                    color_choice = '#fbb03b';
+                                    break;
+                                case "Renewal":
+                                    color_choice = '#223b53'
+                                    break;
+                                case "Ceasefire":
+                                    color_choice = '#e55e5e'
+                                    break;
+                                case "Framework-substantive, partial":
+                                    color_choice = '#3bb2d0'
+                                    break;
+                                case "Implementation":
+                                    color_choice = 'steelblue'
+                                    break;
+                                case "Other":
+                                    color_choice = 'white'
+                                    break;
+                                default:
+                                    color_choice = 'white'
+                            }
+                            return color_choice
+                        })
+                        .style('stroke', "black")
 
-                    console.log(almost_final);
+                    // let almost_final = d3.groups(the_data, function (r) {
+                    //     return r.Dat
+                    // })
+                    // let first_year = almost_final[0][0]
+                    // let last_year = almost_final[almost_final.length - 1][0]
+                    // x_scale.domain([first_year, last_year])
 
-                    svg.selectAll(".mybar")
-                        .data(almost_final, d => d)
-                        .join(
-                            enter => enter.append("rect")
-                                .attr("class", "mybar")
-                                .attr("x", d => x_scale(d[0]))
-                                .attr("y", the_height)
-                                .attr("rx", 3)
-                                .attr("height", 0)
-                                .attr("width", 1)
-                                .attr("fill", "white")
-                                .transition().duration(1000)
-                                .attr("y", function (d) {
-                                    return y(d[1].length)
-                                })
-                                .attr("height", d => the_height - y(d[1].length))
-                                .selection(),
-                            update => update
-                                .transition().duration(1000)
-                                .attr("x", d => x_scale(d[0]))
-                                .attr("y", function (d) {
-                                    return y(d[1].length)
-                                })
-                                .attr("width", 1)
-                                .attr("height", d => the_height - y(d[1].length))
-                                .selection(),
-                            exit => exit
-                                .transition().duration(500)
-                                .attr("y", the_height)
-                                .attr("height", 0)
-                                .remove()
-                        )
+                    // svg.selectAll(".myXaxis").transition().duration(500)
+                    //     .attr("transform", "translate(0," + the_height + ")")
+                    //     .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).ticks(5))
+                    //     .selectAll("text")
+                    //     .style("font-family", "Montserrat")
+                    //     // .attr("transform", "translate(-10,0)rotate(-45)")
+                    //     .style("text-anchor", "middle");
+
+                    // svg.selectAll(".myYaxis")
+                    //     .call(d3.axisLeft(y).tickSize(-width).ticks(3))
+                    //     .style("stroke-dasharray", "10, 5")
+                    //     .selectAll("text")
+                    //     .style("font-family", "Montserrat")
+
+                    // svg.selectAll(".mybar")
+                    //     .data(almost_final, d => d)
+                    //     .join(
+                    //         enter => enter.append("rect")
+                    //             .attr("class", "mybar")
+                    //             .attr("x", d => x_scale(d[0]))
+                    //             .attr("y", the_height)
+                    //             .attr("rx", 3)
+                    //             .attr("height", 0)
+                    //             .attr("width", 1)
+                    //             .attr("fill", "white")
+                    //             .transition().duration(1000)
+                    //             .attr("y", function (d) {
+                    //                 return y(d[1].length)
+                    //             })
+                    //             .attr("height", d => the_height - y(d[1].length))
+                    //             .selection(),
+                    //         update => update
+                    //             .transition().duration(1000)
+                    //             .attr("x", d => x_scale(d[0]))
+                    //             .attr("y", function (d) {
+                    //                 return y(d[1].length)
+                    //             })
+                    //             .attr("width", 1)
+                    //             .attr("height", d => the_height - y(d[1].length))
+                    //             .selection(),
+                    //         exit => exit
+                    //             .transition().duration(500)
+                    //             .attr("y", the_height)
+                    //             .attr("height", 0)
+                    //             .remove()
+                    //     )
 
                     d3.selectAll(".domain")
                         .attr("visibility", "hidden")
