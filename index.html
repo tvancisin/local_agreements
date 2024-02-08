@@ -226,11 +226,12 @@
             raw_data.forEach(function (d) {
                 let curr_id = d.AgtId;
                 let the_country = find_id(curr_id)
+                console.log(the_country);
                 d.Con = the_country[0];
                 d.stage = the_country[1].stage_label;
                 d.description = the_country[1].description;
                 d.agreement = the_country[1].Agt;
-                d.linkie = the_country[1].PAX_Generate_PDF
+                d.linkie = the_country[1].PDF_Hyperlink
                 d.linkie1 = the_country[1].PAX_Hyperlink
                 d.linkie2 = the_country[2].PAX_Local_Hyperlink
                 d.linkie3 = the_country[2].local_search
