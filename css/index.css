@@ -80,12 +80,13 @@ body {
 h3 {
     color: white;
     margin: auto;
-    background-color: #091f40;
+    background-color: black;
     padding: 10px;
     text-align: center;
 }
 
 #process_stage,
+#locale,
 #agreement,
 #desc {
     padding: 5px;
@@ -93,6 +94,11 @@ h3 {
 
 #peace_title_div {
     overflow-y: auto;
+    box-shadow: inset 0 0 5px #414141;
+}
+
+#timeline {
+    box-shadow: inset 0 0 5px #414141;
 }
 
 #peace_title_div::-webkit-scrollbar {
@@ -220,7 +226,17 @@ pre a:-webkit-any-link {
 }
 
 
-#peace_process,
+#peace_process {
+    overflow: hidden;
+    background-color: black;
+    color: white;
+    position: absolute;
+    top: 47px;
+    z-index: 900;
+    border-radius: 5px;
+    padding: 0px;
+}
+
 #info {
     overflow: hidden;
     background-color: black;
@@ -322,9 +338,39 @@ p {
     background-color: rgb(27, 27, 27);
     flex: 1;
     border: 2px solid black;
+    border-radius: 4px;
     text-align: center; 
     padding: 2px;
+    box-shadow: inset 0 0 10px #414141;
   }
+
+  #info_content {
+    background-color: rgb(27, 27, 27);
+    box-shadow: inset 0 0 10px #414141;
+    font-size: 14px;
+    margin: 4px;
+
+  }
+
+ #info_content::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#info_content::-webkit-scrollbar-track {
+    background: #515151;
+}
+
+/* Handle */
+#info_content::-webkit-scrollbar-thumb {
+    background: white;
+}
+
+/* Handle on hover */
+#info_content::-webkit-scrollbar-thumb:hover {
+    background: rgb(230, 103, 103);
+}
+
 
  #img_text {
     font-size: 12px;
@@ -332,4 +378,8 @@ p {
 
  #krava {
     position: relative;
+ }
+
+ #info_content {
+    padding: 20px;
  }
