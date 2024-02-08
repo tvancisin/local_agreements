@@ -383,3 +383,27 @@ p {
  #info_content {
     padding: 20px;
  }
+
+ #first_link:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  #first_link:visited {
+    color: steelblue;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  #first_link:hover {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  #first_link:active {
+    color: red;
+    background-color: transparent;
+    text-decoration: none;
+  }
