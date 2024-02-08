@@ -314,9 +314,22 @@ p {
 
 #links {
     display: flex;
+    margin: 4px;
+    border-radius: 5px;
 }
 
 .box {
+    background-color: rgb(27, 27, 27);
     flex: 1;
-    border: 1px solid black; /* Optional: for visualization */
+    border: 2px solid black;
+    text-align: center; 
+    padding: 2px;
   }
+
+ #img_text {
+    font-size: 12px;
+ }
+
+ #krava {
+    position: relative;
+ }

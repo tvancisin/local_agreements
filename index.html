@@ -50,12 +50,35 @@
         <div id="timeline" class="third">
             <h5 id="time_title" style="margin-left: 10px;">Timeline: </h5>
         </div>
-        <div id="links" class="third">
-            <div class="box"></div>
-            <div class="box"></div>
-            <div class="box"></div>
-            <!-- <a id="linkie" target="_blank" href="https://dennikn.sk/"><img src="img/agt_icon.svg" alt="HTML tutorial"
-                    style="height:20px;"></a> -->
+        <div id="links">
+            <div class="box">
+                <div id="krava">
+                    <a id="linkie" target="_blank" href=""><img src="img/agt_icon.svg" id="first_img"
+                            alt="HTML tutorial"></a>
+                    <p id="img_text">View PDF</p>
+                </div>
+            </div>
+            <div class="box">
+                <div id="krava">
+                    <a id="linkie1" target="_blank" href=""><img src="img/peace_circle.svg" id="second_img"
+                            alt="HTML tutorial"></a>
+                    <p id="img_text">PA-X</p>
+                </div>
+            </div>
+            <div class="box">
+                <div id="krava">
+                    <a id="linkie2" target="_blank" href=""><img src="img/local.svg" id="third_img"
+                            alt="HTML tutorial"></a>
+                    <p id="img_text">PA-X Local</p>
+                </div>
+            </div>
+            <div class="box">
+                <div id="krava">
+                    <a id="linkie3" target="_blank" href=""><img src="img/search.svg" id="four_img"
+                            alt="HTML tutorial"></a>
+                    <p id="img_text">Local Search</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -76,16 +99,15 @@
         let screen_width = window.innerWidth;
         let details_height = screen_height - 50;
 
-        const margin = { top: 20, right: 20, bottom: 35, left: 25 },
+        const margin = { top: 10, right: 20, bottom: 30, left: 25 },
             width = screen_width * 0.28 - margin.left - margin.right,
-            height = details_height / 2.5 - margin.top - margin.bottom,
-            the_height = height + 40;
+            height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
 
-        // append the svg object to the body of the page
+        // append the svg
         const svg = d3.select("#timeline")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", the_height + margin.top + margin.bottom)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -99,11 +121,11 @@
 
         const y = d3.scaleLinear()
             .domain([0, 5])
-            .range([the_height, 0]);
+            .range([height, 0]);
 
         let simulation = d3.forceSimulation()
             .force("x", d3.forceX(function (d) { return x_scale(d[1][0][0]); }).strength(3))
-            .force("y", d3.forceY((the_height) / 2))
+            .force("y", d3.forceY(height / 2))
             .force("collide", d3.forceCollide(8))
             .stop();
 
@@ -152,7 +174,9 @@
             d3.csv("data/local.csv"),
             d3.csv("data/loc_correction.csv"),
             d3.csv("data/pax.csv"),
+            d3.csv("data/links.csv"),
         ]).then(function (files) {
+            // console.log(files[0],files[1],files[2]);
             //clean location names and add description
             let raw_data = files[0]
             let parseDate = d3.timeParse("%d-%m-%Y");
@@ -167,16 +191,23 @@
                 let the_category = files[2].find(function (x) {
                     return x.AgtId == curr_id
                 })
-                return [the_country.country_entity, the_category]
+                let the_link = files[3].find(function (x) {
+                    return x.AgtId == curr_id
+                })
+                return [the_country.country_entity, the_category, the_link]
             }
             raw_data.forEach(function (d) {
                 let curr_id = d.AgtId;
                 let the_country = find_id(curr_id)
+                console.log(the_country[2]);
                 d.Con = the_country[0];
                 d.stage = the_country[1].stage_label;
                 d.description = the_country[1].description;
                 d.agreement = the_country[1].Agt;
                 d.linkie = the_country[1].PAX_Generate_PDF
+                d.linkie1 = the_country[1].PAX_Hyperlink
+                d.linkie2 = the_country[2].PAX_Local_Hyperlink
+                d.linkie3 = the_country[2].local_search
             })
             //construct unique country array
             let country_array = []
@@ -197,7 +228,10 @@
                         'stage': d.stage,
                         'description': d.description,
                         'agreement': d.agreement,
-                        'link': d.linkie
+                        'link': d.linkie,
+                        'link1': d.linkie1,
+                        'link2': d.linkie2,
+                        'link3': d.linkie3
                     },
                     'geometry': {
                         'type': 'Point',
@@ -279,12 +313,19 @@
                         .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + `</p>`)
                     d3.select("#desc")
                         .html(`<h5>Description: </h5>` + `<p>` + description.description + `</p>`)
-                    // $("#linkie").attr('href', description.link);
 
-                    let reduce_height = $("#peace_title").height() + 20;
-                    console.log(reduce_height);
+                    $("#linkie").attr('href', description.link);
+                    $("#linkie1").attr('href', description.link1);
+                    $("#linkie2").attr('href', description.link2);
+                    $("#linkie3").attr('href', description.link3);
+
+                    let reduce_height = $("#peace_title").height() + 21;
+                    let img_height = $(".box").height() - 30;
                     d3.select("#peace_title_div").style("height", stable_height - reduce_height + "px")
-
+                    d3.selectAll("#first_img, #second_img, #third_img, #four_img")
+                        .style("height", img_height + "px")
+                    d3.selectAll("#krava")
+                        .style("top", 10 + "px")
 
                     //timeline
                     let peace_instance = d3.groups(raw_data, function (r) {
@@ -309,7 +350,7 @@
                     simulation.alpha(1).restart().tick();
                     for (var i = 0; i < 200; ++i) { simulation.tick(); }
                     const delaunay = d3.Delaunay.from(year_division, d => d.x, d => d.y),
-                        voronoi = delaunay.voronoi([0, 0, width, the_height]);
+                        voronoi = delaunay.voronoi([0, 0, width, height]);
                     //drawing x axis
                     svg.selectAll(".myXaxis").transition().duration(500)
                         .attr("transform", "translate(0," + height + ")")
