@@ -86,8 +86,32 @@ h3 {
 }
 
 #process_stage,
-#agreement {
+#agreement,
+#desc {
     padding: 5px;
+}
+
+#peace_title_div {
+    overflow-y: auto;
+}
+
+#peace_title_div::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#peace_title_div::-webkit-scrollbar-track {
+    background: #515151;
+}
+
+/* Handle */
+#peace_title_div::-webkit-scrollbar-thumb {
+    background: white;
+}
+
+/* Handle on hover */
+#peace_title_div::-webkit-scrollbar-thumb:hover {
+    background: rgb(230, 103, 103);
 }
 
 h5 {
@@ -287,3 +311,12 @@ p {
     position: relative;
     top: 5px;
 }
+
+#links {
+    display: flex;
+}
+
+.box {
+    flex: 1;
+    border: 1px solid black; /* Optional: for visualization */
+  }

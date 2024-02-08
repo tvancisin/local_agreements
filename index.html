@@ -23,7 +23,7 @@
     <div id="header">
         <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
         <img id="local_img" src="img/local.svg" alt="PeaceRep Local Logo" />
-        <h1 id="big_title">PA-X LOCAL AGREEMENTS</h1>
+        <h1 id="big_title">PA-X Local Agreements</h1>
         <button id="refresh_button"><i class="fa fa-refresh" style="color:black"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
     </div>
@@ -41,19 +41,21 @@
     <div id="description"></div>
 
     <div id="peace_process">
+        <h3 id="peace_title"></h3>
         <div id="peace_title_div" class="third">
-            <h3 id="peace_title"></h3>
             <div id="process_stage"></div>
             <div id="agreement"></div>
-        </div>
-        <div id="peace_content" class="third">
-            <h5 style="margin-left: 10px;">Description: </h5>
-            <p id="peace"></p>
-            <p id="peace">View agreement: <a id="linkie" target="_blank" href="https://dennikn.sk/"><img
-                        src="img/agt_icon.svg" alt="HTML tutorial" style="height:20px;"></a></p>
+            <div id="desc"></div>
         </div>
         <div id="timeline" class="third">
             <h5 id="time_title" style="margin-left: 10px;">Timeline: </h5>
+        </div>
+        <div id="links" class="third">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <!-- <a id="linkie" target="_blank" href="https://dennikn.sk/"><img src="img/agt_icon.svg" alt="HTML tutorial"
+                    style="height:20px;"></a> -->
         </div>
     </div>
 
@@ -76,9 +78,8 @@
 
         const margin = { top: 20, right: 20, bottom: 35, left: 25 },
             width = screen_width * 0.28 - margin.left - margin.right,
-            height = details_height / 3 - margin.top - margin.bottom,
-            the_height = height - 10;
-
+            height = details_height / 2.5 - margin.top - margin.bottom,
+            the_height = height + 40;
 
         // append the svg object to the body of the page
         const svg = d3.select("#timeline")
@@ -112,7 +113,11 @@
             .style("right", - screen_width * 0.30 + "px")
 
         d3.selectAll(".third")
-            .style("height", (details_height - 16) / 3 + "px")
+            .style("height", (details_height - 16) * 0.45 + "px")
+        d3.select("#links")
+            .style("height", (details_height - 16) * 0.1 + "px")
+
+        const stable_height = (details_height - 16) * 0.45;
         // info button
         let counter_collab = 0;
         d3.select("#info_button").on("click", function () {
@@ -224,13 +229,13 @@
                             "circle-opacity": 0.7,
                             "circle-stroke-width": 1,
                             'circle-radius': 7,
-                            "circle-stroke-color": 
-                            [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                'white',
-                                'black' 
-                            ],
+                            "circle-stroke-color":
+                                [
+                                    'case',
+                                    ['boolean', ['feature-state', 'hover'], false],
+                                    'white',
+                                    'black'
+                                ],
                             'circle-color':
                                 [
                                     'match',
@@ -258,7 +263,6 @@
                 map.on('click', 'population', (e, i) => {
                     map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
                     const description = e.features[0].properties
-                    console.log(description);
                     d3.select("#peace_process")
                         .transition().duration(800)
                         .style("right", 3 + "px")
@@ -273,9 +277,14 @@
                         .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
                     d3.select("#agreement")
                         .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + `</p>`)
-                    d3.select("#peace")
-                        .html(description.description)
-                    $("#linkie").attr('href', description.link);
+                    d3.select("#desc")
+                        .html(`<h5>Description: </h5>` + `<p>` + description.description + `</p>`)
+                    // $("#linkie").attr('href', description.link);
+
+                    let reduce_height = $("#peace_title").height() + 20;
+                    console.log(reduce_height);
+                    d3.select("#peace_title_div").style("height", stable_height - reduce_height + "px")
+
 
                     //timeline
                     let peace_instance = d3.groups(raw_data, function (r) {
@@ -298,19 +307,12 @@
                         .nice();
                     simulation.nodes(year_division)
                     simulation.alpha(1).restart().tick();
-
-                    // let simulation = d3.forceSimulation(year_division)
-                    //     .force("x", d3.forceX(function (d) { return x_scale(d[1][0][0]); }).strength(3))
-                    //     .force("y", d3.forceY((the_height) / 2))
-                    //     .force("collide", d3.forceCollide(8))
-                    //     .stop();
-
                     for (var i = 0; i < 200; ++i) { simulation.tick(); }
                     const delaunay = d3.Delaunay.from(year_division, d => d.x, d => d.y),
                         voronoi = delaunay.voronoi([0, 0, width, the_height]);
                     //drawing x axis
                     svg.selectAll(".myXaxis").transition().duration(500)
-                        .attr("transform", "translate(0," + the_height + ")")
+                        .attr("transform", "translate(0," + height + ")")
                         .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).tickSize(-height).ticks(5))
                         .style("stroke-dasharray", "5 5")
                         .selectAll("text")
@@ -327,61 +329,43 @@
                         .attr('cy', d => d.y)
                         .attr("class", "my_circles")
                         .attr('r', function (d) {
-                            return 8
+                            return 7
                         })
                         .style('fill', function (d) {
+                            let color_choice;
+                            switch (d[1][0][1][0].stage) {
+                                case "Pre-negotiation":
+                                    color_choice = '#fbb03b';
+                                    break;
+                                case "Renewal":
+                                    color_choice = '#223b53'
+                                    break;
+                                case "Ceasefire":
+                                    color_choice = '#e55e5e'
+                                    break;
+                                case "Framework-substantive, partial":
+                                    color_choice = '#3bb2d0'
+                                    break;
+                                case "Implementation":
+                                    color_choice = 'steelblue'
+                                    break;
+                                case "Other":
+                                    color_choice = 'white'
+                                    break;
+                                default:
+                                    color_choice = 'white'
+                            }
+                            return color_choice
+                        })
+                        .style('stroke', function (d) {
                             if (d[1][0][1][0].AgtId == description.id) {
-                                return "#fed800"
+                                return "white"
                             }
                             else {
-                                return "steelblue"
+                                return "none"
                             }
-                            // switch (d[1][0][1][0].stage) {
-                            //     case "Pre-negotiation":
-                            //         color_choice = '#fbb03b';
-                            //         break;
-                            //     case "Renewal":
-                            //         color_choice = '#223b53'
-                            //         break;
-                            //     case "Ceasefire":
-                            //         color_choice = '#e55e5e'
-                            //         break;
-                            //     case "Framework-substantive, partial":
-                            //         color_choice = '#3bb2d0'
-                            //         break;
-                            //     case "Implementation":
-                            //         color_choice = 'steelblue'
-                            //         break;
-                            //     case "Other":
-                            //         color_choice = 'white'
-                            //         break;
-                            //     default:
-                            //         color_choice = 'white'
-                            // }
-                            // return color_choice
                         })
-                        .style('stroke', "black")
-
-                    // let almost_final = d3.groups(the_data, function (r) {
-                    //     return r.Dat
-                    // })
-                    // let first_year = almost_final[0][0]
-                    // let last_year = almost_final[almost_final.length - 1][0]
-                    // x_scale.domain([first_year, last_year])
-
-                    // svg.selectAll(".myXaxis").transition().duration(500)
-                    //     .attr("transform", "translate(0," + the_height + ")")
-                    //     .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).ticks(5))
-                    //     .selectAll("text")
-                    //     .style("font-family", "Montserrat")
-                    //     // .attr("transform", "translate(-10,0)rotate(-45)")
-                    //     .style("text-anchor", "middle");
-
-                    // svg.selectAll(".myYaxis")
-                    //     .call(d3.axisLeft(y).tickSize(-width).ticks(3))
-                    //     .style("stroke-dasharray", "10, 5")
-                    //     .selectAll("text")
-                    //     .style("font-family", "Montserrat")
+                        .style('stroke-width', 2)
 
                     // svg.selectAll(".mybar")
                     //     .data(almost_final, d => d)
