@@ -558,6 +558,13 @@
 
                 // refresh everything
                 d3.select("#refresh_button").on("click", function (m) {
+                    if (hoveredPolygonId !== null) {
+                        map.setFeatureState(
+                            { source: 'states', id: hoveredPolygonId },
+                            { click: false }
+                        );
+                    }
+                    hoveredPolygonId = null;
                     map.flyTo({ center: [40.137343, 25.137451], zoom: 3 });
                     // d3.select("#big_title").text("Conflict and Peace Process Map")
                     d3.selectAll("#peace_process, #info")
