@@ -49,14 +49,23 @@
             </br>
             </br>
             If you are interested in how we selected documents and made decisions on coding,
-            see our <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20final%20(6).pdf">About PA-X Local</a>
-            document (also available in <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20Ar%20(1)%20(2).pdf">Arabic</a>
-             and <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20FR%20(3).pdf">French</a>).
+            see our <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20final%20(6).pdf">About PA-X
+                Local</a>
+            document (also available in <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20Ar%20(1)%20(2).pdf">Arabic</a>
+            and <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/About%20PA-X%20Local%20-%20FR%20(3).pdf">French</a>).
             </br>
             </br>
-            See also the <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/Glossary_PA-X_Local.pdf">local agreements glossary/definitions</a>,
-            <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/PA-X%20Local%20Codebook%20Version%204%20(2023).pdf">codebook</a>, and
-             <a id="first_link" target="_blank" href="https://www.peaceagreements.org/files/Terms_of_Use_updated_added_local.pdf">terms of use</a>.
+            See also the <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/Glossary_PA-X_Local.pdf">local agreements
+                glossary/definitions</a>,
+            <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/PA-X%20Local%20Codebook%20Version%204%20(2023).pdf">codebook</a>,
+            and
+            <a id="first_link" target="_blank"
+                href="https://www.peaceagreements.org/files/Terms_of_Use_updated_added_local.pdf">terms of use</a>.
 
         </div>
     </div>
@@ -226,7 +235,7 @@
             raw_data.forEach(function (d) {
                 let curr_id = d.AgtId;
                 let the_country = find_id(curr_id)
-                console.log(the_country);
+                // console.log(the_country);
                 d.Con = the_country[0];
                 d.stage = the_country[1].stage_label;
                 d.description = the_country[1].description;
@@ -289,12 +298,12 @@
                         'source': 'states',
                         'paint': {
                             "circle-opacity": 0.7,
-                            "circle-stroke-width": 1,
+                            "circle-stroke-width": 2,
                             'circle-radius': 7,
                             "circle-stroke-color":
                                 [
                                     'case',
-                                    ['boolean', ['feature-state', 'hover'], false],
+                                    ['boolean', ['feature-state', 'click'], false],
                                     'white',
                                     'black'
                                 ],
@@ -323,6 +332,21 @@
                 );
 
                 map.on('click', 'population', (e, i) => {
+                    if (e.features.length > 0) {
+                        if (hoveredPolygonId !== null) {
+                            map.setFeatureState(
+                                { source: 'states', id: hoveredPolygonId },
+                                { click: false }
+                            );
+                        }
+                        hoveredPolygonId = e.features[0].id;
+                        map.setFeatureState(
+                            { source: 'states', id: hoveredPolygonId },
+                            { click: true }
+                        );
+                    }
+                    d3.select("#description")
+                        .style("display", "none")
                     map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
                     const description = e.features[0].properties
                     d3.select("#peace_process")
@@ -494,26 +518,22 @@
                     map.setFilter('population', ['==', 'stage', 'Other']);
                 })
 
-                map.on('mouseenter', 'population', (e) => {
+                map.on('mousemove', 'population', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
                     const description = e.features[0].properties
-                    if (e.features.length > 0) {
-                        if (hoveredPolygonId !== null) {
-                            map.setFeatureState(
-                                { source: 'states', id: hoveredPolygonId },
-                                { hover: false }
-                            );
-                            map.setFeatureState(
-                                { source: 'states', id: hoveredPolygonId },
-                                { hover: false }
-                            );
-                        }
-                        hoveredPolygonId = e.features[0].id;
-                        map.setFeatureState(
-                            { source: 'states', id: hoveredPolygonId },
-                            { hover: true }
-                        );
-                    }
+                    // if (e.features.length > 0) {
+                    //     if (hoveredPolygonId !== null) {
+                    //         map.setFeatureState(
+                    //             { source: 'states', id: hoveredPolygonId },
+                    //             { click: false }
+                    //         );
+                    //     }
+                    //     hoveredPolygonId = e.features[0].id;
+                    //     map.setFeatureState(
+                    //         { source: 'states', id: hoveredPolygonId },
+                    //         { click: true }
+                    //     );
+                    // }
 
                     d3.select("#description")
                         .style("display", "block")
@@ -525,13 +545,13 @@
                 // Change it back to a pointer when it leaves.
                 map.on('mouseleave', 'population', () => {
                     map.getCanvas().style.cursor = '';
-                    if (hoveredPolygonId !== null) {
-                        map.setFeatureState(
-                            { source: 'states', id: hoveredPolygonId },
-                            { hover: false }
-                        );
-                    }
-                    hoveredPolygonId = null;
+                    // if (hoveredPolygonId !== null) {
+                    //     map.setFeatureState(
+                    //         { source: 'states', id: hoveredPolygonId },
+                    //         { hover: false }
+                    //     );
+                    // }
+                    // hoveredPolygonId = null;
                     d3.select("#description")
                         .style("display", "none")
                 });
