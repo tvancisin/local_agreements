@@ -87,28 +87,28 @@
             <h5 id="time_title" style="margin-left: 10px;">Timeline: </h5>
         </div>
         <div id="links">
-            <div class="box">
+            <div class="box" id="box1">
                 <div id="krava">
                     <a id="linkie" target="_blank" href=""><img src="img/agt_icon.svg" id="first_img"
                             alt="HTML tutorial"></a>
                     <p id="img_text">View PDF</p>
                 </div>
             </div>
-            <div class="box">
+            <div class="box" id="box2">
                 <div id="krava">
                     <a id="linkie1" target="_blank" href=""><img src="img/peace_circle.svg" id="second_img"
                             alt="HTML tutorial"></a>
                     <p id="img_text">PA-X</p>
                 </div>
             </div>
-            <div class="box">
+            <div class="box" id="box3">
                 <div id="krava">
                     <a id="linkie2" target="_blank" href=""><img src="img/local.svg" id="third_img"
                             alt="HTML tutorial"></a>
                     <p id="img_text">PA-X Local</p>
                 </div>
             </div>
-            <div class="box">
+            <div class="box" id="box4">
                 <div id="krava">
                     <a id="linkie3" target="_blank" href=""><img src="img/search.svg" id="four_img"
                             alt="HTML tutorial"></a>
@@ -121,11 +121,11 @@
     <div id="net-legend" class="legend">
         <h4 id="filter_title">Filter by Stages</h4>
         <div id="one"><span style="background-color: #fbb03b; cursor: pointer;"></span>Pre-negotiation</div>
-        <div id="two"><span style="background-color: #223b53; cursor: pointer;"></span>Renewal</div>
         <div id="three"><span style="background-color: #e55e5e; cursor: pointer;"></span>Ceasefire</div>
         <div id="four"><span style="background-color: #3bb2d0; cursor: pointer;"></span>Framework-substantive, partial
         </div>
         <div id="five"><span style="background-color: steelblue; cursor: pointer;"></span>Implementation</div>
+        <div id="two"><span style="background-color: #223b53; cursor: pointer;"></span>Renewal</div>
         <div id="six"><span style="background-color: white; cursor: pointer;"></span>Other</div>
     </div>
 
@@ -204,6 +204,23 @@
             center: [40.137343, 25.137451],
             zoom: 3,
             attributionControl: false
+        });
+
+        $('#box1').click(function () {
+            window.open($(this).find('a:first').attr('href'));
+            return false;
+        });
+        $('#box2').click(function () {
+            window.open($(this).find('a:first').attr('href'));
+            return false;
+        });
+        $('#box3').click(function () {
+            window.open($(this).find('a:first').attr('href'));
+            return false;
+        });
+        $('#box4').click(function () {
+            window.open($(this).find('a:first').attr('href'));
+            return false;
         });
 
         // load the data
@@ -362,7 +379,7 @@
                     d3.select("#process_stage")
                         .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
                     d3.select("#agreement")
-                        .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` +`</p>`)
+                        .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
                     d3.select("#locale")
                         .html(`<h5>Locale: </h5>` + `<p>` + description.text + `</p>`)
                     d3.select("#desc")
@@ -498,6 +515,8 @@
                     d3.selectAll(".domain")
                         .attr("visibility", "hidden")
                 })
+
+
 
                 d3.select("#one").on("click", function (d) {
                     map.setFilter('population', ['==', 'stage', 'Pre-negotiation']);
