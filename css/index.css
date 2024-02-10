@@ -273,7 +273,7 @@ pre a:-webkit-any-link {
     background: rgb(230, 103, 103);
 }
 
-#description {
+#description, #timeline_description {
     position: absolute;
     font-size: 12px;
     z-index: 999;

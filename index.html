@@ -34,14 +34,13 @@
         </div>
         <div id="info_content">
             This database lists all agreements included on the main PA-X database that deal in some way with local
-            issues,
-            involve local actors, and deal with forms of local/communal violent conflict. Agreements span the 1990 to
-            2023,
-            with global coverage, forming a collection of 344 local agreements, 12 of which are new in this release of
-            PA-X
-            Local. PA-X Local only includes agreements for which we could obtain a text, and is therefore neither
-            exhaustive
-            of all local negotiation practices, nor clearly representative of them, nor of the range of armed actors and
+            issues, involve local actors, and deal with forms of local/communal violent conflict. Agreements span the
+            1990 to
+            2023, with global coverage, forming a collection of 344 local agreements, 12 of which are new in this
+            release of
+            PA-X Local. PA-X Local only includes agreements for which we could obtain a text, and is therefore neither
+            exhaustive of all local negotiation practices, nor clearly representative of them, nor of the range of armed
+            actors and
             groups involved in local agreement-making. While it is likely to therefore reflect some processes more than
             others, it forms a useful qualitative tool for beginning to understand local processes and is the only
             database
@@ -72,8 +71,9 @@
 
     <div id="map"></div>
 
-    <div id="description">
-    </div>
+    <div id="description"></div>
+
+    <div id="timeline_description"></div>
 
     <div id="peace_process">
         <h3 id="peace_title"></h3>
@@ -477,7 +477,19 @@
                                 return "none"
                             }
                         })
+                        .style("cursor", "pointer")
                         .style('stroke-width', 2)
+                        .on("mouseover", function (d, i) {
+                            d3.select("#timeline_description")
+                                .style("display", "block")
+                                .style("left", d.x - 160 + "px")
+                                .style("top", d.y - 20 + "px")
+                                .html(i[1][0][1][0].Agt)
+                        })
+                        .on("mouseleave", function (d, i) {
+                            d3.select("#timeline_description")
+                                .style("display", "none")
+                        })
 
                     // svg.selectAll(".mybar")
                     //     .data(almost_final, d => d)
