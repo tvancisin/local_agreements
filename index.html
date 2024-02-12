@@ -120,13 +120,13 @@
 
     <div id="net-legend" class="legend">
         <h4 id="filter_title">Filter by Stages</h4>
-        <div id="one"><span style="background-color: #fbb03b; cursor: pointer;"></span>Pre-negotiation</div>
-        <div id="three"><span style="background-color: #e55e5e; cursor: pointer;"></span>Ceasefire</div>
-        <div id="four"><span style="background-color: #3bb2d0; cursor: pointer;"></span>Framework-substantive, partial
+        <div id="one"><span style="background-color: #ffdd7b; cursor: pointer;"></span>Pre-negotiation</div>
+        <div id="three"><span style="background-color: #FF5733; cursor: pointer;"></span>Ceasefire</div>
+        <div id="four"><span style="background-color: #3d693e; cursor: pointer;"></span>Framework-substantive, partial
         </div>
-        <div id="five"><span style="background-color: steelblue; cursor: pointer;"></span>Implementation</div>
-        <div id="two"><span style="background-color: #223b53; cursor: pointer;"></span>Renewal</div>
-        <div id="six"><span style="background-color: white; cursor: pointer;"></span>Other</div>
+        <div id="five"><span style="background-color: #FF4081; cursor: pointer;"></span>Implementation</div>
+        <div id="two"><span style="background-color: #4eb1ff; cursor: pointer;"></span>Renewal</div>
+        <div id="six"><span style="background-color: #1d00ff; cursor: pointer;"></span>Other</div>
     </div>
 
     <script>
@@ -329,21 +329,26 @@
                                     'match',
                                     ['get', 'stage'],
                                     'Pre-negotiation',
-                                    '#fbb03b',
-                                    'Renewal',
-                                    '#223b53',
+                                    '#ffdd7b',
                                     'Ceasefire',
-                                    '#e55e5e',
+                                    '#FF5733',
                                     'Framework-substantive, partial',
-                                    '#3bb2d0',
+                                    '#3d693e',
                                     'Implementation',
-                                    'steelblue',
+                                    '#FF4081',
+                                    'Renewal',
+                                    '#4eb1ff',
                                     'Other',
-                                    'white',
-                                    'white'
+                                    '#1d00ff',
+                                    'gray'
                                 ]
                         }
                     },
+
+
+
+
+
                     // Place polygons under labels, roads and buildings.
                     // 'aeroway-polygon'
                 );
@@ -447,25 +452,25 @@
                             let color_choice;
                             switch (d[1][0][1][0].stage) {
                                 case "Pre-negotiation":
-                                    color_choice = '#fbb03b';
-                                    break;
-                                case "Renewal":
-                                    color_choice = '#223b53'
+                                    color_choice = '#ffdd7b';
                                     break;
                                 case "Ceasefire":
-                                    color_choice = '#e55e5e'
+                                    color_choice = '#FF5733'
                                     break;
                                 case "Framework-substantive, partial":
-                                    color_choice = '#3bb2d0'
+                                    color_choice = '#3d693e'
                                     break;
                                 case "Implementation":
-                                    color_choice = 'steelblue'
+                                    color_choice = '#FF4081'
+                                    break;
+                                case "Renewal":
+                                    color_choice = '#4eb1ff'
                                     break;
                                 case "Other":
-                                    color_choice = 'white'
+                                    color_choice = '#1d00ff'
                                     break;
                                 default:
-                                    color_choice = 'white'
+                                    color_choice = 'gray'
                             }
                             return color_choice
                         })
@@ -480,11 +485,12 @@
                         .style("cursor", "pointer")
                         .style('stroke-width', 2)
                         .on("mouseover", function (d, i) {
+                            console.log(i[1][0][1][0]);
                             d3.select("#timeline_description")
                                 .style("display", "block")
                                 .style("left", d.x - 160 + "px")
                                 .style("top", d.y - 20 + "px")
-                                .html(i[1][0][1][0].Agt)
+                                .html(i[1][0][1][0].Agt + ` (` + i[1][0][1][0].Dat + `)`)
                         })
                         .on("mouseleave", function (d, i) {
                             d3.select("#timeline_description")
