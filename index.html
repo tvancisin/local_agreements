@@ -24,7 +24,7 @@
         <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
         <img id="local_img" src="img/local.svg" alt="PeaceRep Local Logo" />
         <h1 id="big_title">PA-X Local Agreements</h1>
-        <button id="refresh_button"><i class="fa fa-refresh" style="color:black"></i></button>
+        <button id="refresh_button" title="Reset"><i class="fa fa-refresh" style="color:black"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
     </div>
 
@@ -118,15 +118,9 @@
         </div>
     </div>
 
-    <div id="net-legend" class="legend">
+    <div class="legend">
         <h4 id="filter_title">Filter by Stages</h4>
-        <div id="one"><span style="background-color: #ffdd7b; cursor: pointer;"></span>Pre-negotiation</div>
-        <div id="three"><span style="background-color: #FF5733; cursor: pointer;"></span>Ceasefire</div>
-        <div id="four"><span style="background-color: #3d693e; cursor: pointer;"></span>Framework-substantive, partial
-        </div>
-        <div id="five"><span style="background-color: #FF4081; cursor: pointer;"></span>Implementation</div>
-        <div id="two"><span style="background-color: #4eb1ff; cursor: pointer;"></span>Renewal</div>
-        <div id="six"><span style="background-color: #1d00ff; cursor: pointer;"></span>Other</div>
+        <button id="mini_refresh_button" title="Reset"><i class="fa fa-refresh" style="color:black"></i></button>
     </div>
 
     <script>
@@ -138,6 +132,32 @@
         const margin = { top: 10, right: 20, bottom: 30, left: 25 },
             width = screen_width * 0.28 - margin.left - margin.right,
             height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
+
+        const legend_array = ["Other", "Implementation", "Framework-substantive, partial",
+            "Ceasefire", "Pre-negotiation"]
+
+        let legend_svg = d3.select(".legend")
+            .append("svg")
+            .attr("width", 200 + margin.left + margin.right)
+            .attr("height", 85 + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${10},${margin.top})`);
+
+        legend_svg.selectAll(".legend_text")
+            .data(legend_array)
+            .join("text")
+            .attr("text-anchor", "left")
+            .attr("dx", 15)
+            .attr("class", "legend_text")
+            .attr("x", 0)
+            .attr("fill", "white")
+            .attr("y", function (d, i) {
+                return 120 - (i * 25 + 10)
+            })
+            .text(function (d) {
+                return d
+            })
+            .style("font-size", 12)
 
         // append the svg
         const svg = d3.select("#timeline")
@@ -535,25 +555,44 @@
                 })
 
 
+                legend_svg.selectAll(".legend_circle")
+                    .data(legend_array)
+                    .join("circle")
+                    .attr("cx", 0)
+                    .attr("cy", function (d, i) {
+                        return 130 - (i * 25 + 25)
+                    })
+                    .attr("r", 8)
+                    .style("cursor", "pointer")
+                    .style("fill", function (d) {
+                        if (d == "Pre-negotiation") {
+                            return "#ffdd7b"
+                        }
+                        else if (d == "Ceasefire") {
+                            return "#FF5733"
+                        }
+                        else if (d == "Framework-substantive, partial") {
+                            return "#3d693e"
+                        }
+                        else if (d == "Implementation") {
+                            return "#FF4081"
+                        }
+                        else if (d == "Other") {
+                            return "#1d00ff"
+                        }
 
-                d3.select("#one").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Pre-negotiation']);
-                })
-                d3.select("#two").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Renewal']);
-                })
-                d3.select("#three").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Ceasefire']);
-                })
-                d3.select("#four").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Framework-substantive, partial']);
-                })
-                d3.select("#five").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Implementation']);
-                })
-                d3.select("#six").on("click", function (d) {
-                    map.setFilter('population', ['==', 'stage', 'Other']);
-                })
+                    })
+                    .style("stroke", "none")
+                    .attr("class", "legend_circle")
+                    .on("click", function (i, d) {
+                        d3.selectAll(".legend_circle")
+                            .style("stroke", "none")
+                        map.setFilter('population', ['==', 'stage', d]);
+                        d3.select(this)
+                            .style("stroke", "white")
+                            .style("stroke-width", 2)
+                    })
+
 
                 map.on('mousemove', 'population', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
@@ -594,7 +633,9 @@
                 });
 
                 // refresh everything
-                d3.select("#refresh_button").on("click", function (m) {
+                d3.selectAll("#refresh_button, #mini_refresh_button").on("click", function (m) {
+                    d3.selectAll(".legend_circle")
+                        .style("stroke", "none")
                     if (hoveredPolygonId !== null) {
                         map.setFeatureState(
                             { source: 'states', id: hoveredPolygonId },

@@ -141,7 +141,27 @@ h5 {
     cursor: pointer;
 }
 
+#mini_refresh_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 3px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 #refresh_button:hover {
+    background-color: #006297
+}
+
+#mini_refresh_button:hover {
     background-color: #006297
 }
 
