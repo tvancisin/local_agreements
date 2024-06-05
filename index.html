@@ -10,6 +10,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -24,7 +25,7 @@
         <img id="title_img" src="img/logo.png" alt="PeaceRep Logo" />
         <img id="local_img" src="img/local.svg" alt="PeaceRep Local Logo" />
         <h1 id="big_title">PA-X Local Agreements</h1>
-        <button id="refresh_button" title="Reset"><i class="fa fa-refresh" style="color:black"></i></button>
+        <button id="refresh_button" title="Reset"><i class="fa fa-refresh"></i></button>
         <button title="Information" id="info_button"><i class="fa fa-info"></i></button>
     </div>
 
@@ -65,7 +66,10 @@
             and
             <a id="first_link" target="_blank"
                 href="https://www.peaceagreements.org/files/Terms_of_Use_updated_added_local.pdf">terms of use</a>.
-
+            <br>
+            <br>
+            <p style="font-size: 14px;">Credits: Vizualization by Tomas Vancisin, University of Edinburgh.
+            </p>
         </div>
     </div>
 
@@ -83,8 +87,13 @@
             <div id="agreement"></div>
             <div id="desc"></div>
         </div>
-        <div id="timeline" class="third">
-            <h5 id="time_title" style="margin-left: 10px;">Timeline: </h5>
+        <div id="timelines" class="third">
+            <h5 id="time_title" style="text-align: center;">Timeline</h5>
+            <div id="timeline_buttons">
+                <button id="bee_time_btn" title="switch"><i class="fa fa-arrows-h" aria-hidden="true"></i></button>
+            </div>
+            <div id="timeline"></div>
+            <div id="chart"></div>
         </div>
         <div id="links">
             <div class="box" id="box1">
@@ -112,604 +121,61 @@
                 <div id="krava">
                     <a id="linkie3" target="_blank" href=""><img src="img/search.svg" id="four_img"
                             alt="HTML tutorial"></a>
-                    <p id="img_text">Local Search</p>
+                    <p id="img_text">Search</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="legend">
-        <h4 id="filter_title">Filter by Stages</h4>
-        <button id="mini_refresh_button" title="Reset"><i class="fa fa-refresh" style="color:black"></i></button>
+    <button id="filter_button">Filter</button>
+
+    <div id="filters">
+        <div class="filter_local">
+            <button id="mini_refresh_button" title="Reset" style="top: 5px;"><i class="fa fa-refresh"></i></button>
+            <h4 style="margin-bottom: 7px; margin-top: 0px; font-size: 14px;">Filter by Local Issues</h4>
+            <label class="container">National Link
+                <input type="radio" id="nat" name="radio">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Ritual/Prayer
+                <input type="radio" id="rit" name="radio">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Grievance
+                <input type="radio" id="gri" name="radio">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Cattle
+                <input type="radio" id="cat" name="radio">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Social Cover
+                <input type="radio" id="cov" name="radio">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+
+        <div id="main_timeline">
+            <h4 id="filter_title" style="color: white; margin-bottom: 7px; margin-top: 0px; font-size: 14px;">Filter by
+                Year</h4>
+        </div>
+
     </div>
 
-    <script>
-        //adapt to screen
-        let screen_height = window.innerHeight;
-        let screen_width = window.innerWidth;
-        let details_height = screen_height - 50;
-
-        const margin = { top: 10, right: 20, bottom: 30, left: 25 },
-            width = screen_width * 0.28 - margin.left - margin.right,
-            height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
-
-        const legend_array = ["Other", "Implementation", "Framework-substantive, partial",
-            "Ceasefire", "Pre-negotiation"]
-
-        let legend_svg = d3.select(".legend")
-            .append("svg")
-            .attr("width", 200 + margin.left + margin.right)
-            .attr("height", 85 + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${10},${margin.top})`);
-
-        legend_svg.selectAll(".legend_text")
-            .data(legend_array)
-            .join("text")
-            .attr("text-anchor", "left")
-            .attr("dx", 15)
-            .attr("class", "legend_text")
-            .attr("x", 0)
-            .attr("fill", "white")
-            .attr("y", function (d, i) {
-                return 120 - (i * 25 + 10)
-            })
-            .text(function (d) {
-                return d
-            })
-            .style("font-size", 12)
-
-        // append the svg
-        const svg = d3.select("#timeline")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        svg.append("g")
-            .attr("class", "myXaxis")
-        svg.append("g")
-            .attr("class", "myYaxis")
-
-        const x_scale = d3.scaleTime()
-            .range([0, width])
-
-        const y = d3.scaleLinear()
-            .domain([0, 5])
-            .range([height, 0]);
-
-        let simulation = d3.forceSimulation()
-            .force("x", d3.forceX(function (d) { return x_scale(d[1][0][0]); }).strength(3))
-            .force("y", d3.forceY(height / 2))
-            .force("collide", d3.forceCollide(8))
-            .stop();
-
-        d3.select("#info_content").style("height", details_height - 90 + "px")
-        d3.selectAll("#peace_process, #info")
-            .style("height", details_height + "px")
-            .style("width", screen_width * 0.28 + "px")
-            .style("right", - screen_width * 0.30 + "px")
-
-        d3.selectAll(".third")
-            .style("height", (details_height - 16) * 0.45 + "px")
-        d3.select("#links")
-            .style("height", (details_height - 16) * 0.1 + "px")
-
-        const stable_height = (details_height - 16) * 0.45;
-        // info button
-        let counter_collab = 0;
-        d3.select("#info_button").on("click", function () {
-            counter_collab += 1;
-            d3.selectAll("#peace_process")
-                .transition().duration(800)
-                .style("right", - screen_width * 0.30 + "px")
-            if (counter_collab % 2 !== 0) {
-                d3.select("#info")
-                    .transition().duration(500)
-                    .style("right", 5 + "px")
-            }
-            else {
-                d3.select("#info")
-                    .transition().duration(500)
-                    .style("right", - screen_width * 0.30 + "px")
-            }
-        })
-        // load mapbox
-        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg';
-        const map = new mapboxgl.Map({
-            container: 'map',
-            // style: 'mapbox://styles/mapbox/dark-v11',
-            style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
-            center: [40.137343, 25.137451],
-            zoom: 3,
-            attributionControl: false
-        });
-
-        $('#box1').click(function () {
-            window.open($(this).find('a:first').attr('href'));
-            return false;
-        });
-        $('#box2').click(function () {
-            window.open($(this).find('a:first').attr('href'));
-            return false;
-        });
-        $('#box3').click(function () {
-            window.open($(this).find('a:first').attr('href'));
-            return false;
-        });
-        $('#box4').click(function () {
-            window.open($(this).find('a:first').attr('href'));
-            return false;
-        });
-
-        // load the data
-        Promise.all([
-            d3.csv("data/local.csv"),
-            d3.csv("data/loc_correction.csv"),
-            d3.csv("data/pax.csv"),
-            d3.csv("data/links.csv"),
-        ]).then(function (files) {
-            //clean location names and add description
-            let raw_data = files[0]
-            let parseDate = d3.timeParse("%d-%m-%Y");
-            raw_data.forEach(function (o) {
-                o.date = o.Dat.replace(/\//g, '-')
-                o.date = parseDate(o.date)
-            })
-            function find_id(curr_id) {
-                let the_country = files[1].find(function (x) {
-                    return x.AgtId == curr_id
-                })
-                let the_category = files[2].find(function (x) {
-                    return x.AgtId == curr_id
-                })
-                let the_link = files[3].find(function (x) {
-                    return x.AgtId == curr_id
-                })
-                return [the_country.country_entity, the_category, the_link]
-            }
-            raw_data.forEach(function (d) {
-                let curr_id = d.AgtId;
-                let the_country = find_id(curr_id)
-                // console.log(the_country);
-                d.Con = the_country[0];
-                d.stage = the_country[1].stage_label;
-                d.description = the_country[1].description;
-                d.agreement = the_country[1].Agt;
-                d.linkie = the_country[1].PDF_Hyperlink
-                d.linkie1 = the_country[1].PAX_Hyperlink
-                d.linkie2 = the_country[2].PAX_Local_Hyperlink
-                d.linkie3 = the_country[2].local_search
-            })
-            //construct unique country array
-            let country_array = []
-            raw_data.forEach((d) => {
-                if (country_array.includes(d.Con) == false) {
-                    country_array.push(d.Con)
-                }
-            })
-            // creating conflict geojson
-            let local_conflict_geojson = []
-            raw_data.forEach(function (d) {
-                let to_push = {
-                    'type': 'Feature',
-                    'properties': {
-                        'id': d.AgtId,
-                        'p_process': d.PPName,
-                        'text': d.LocaleName,
-                        'stage': d.stage,
-                        'description': d.description,
-                        'agreement': d.agreement,
-                        'datum': d.Dat,
-                        'link': d.linkie,
-                        'link1': d.linkie1,
-                        'link2': d.linkie2,
-                        'link3': d.linkie3
-                    },
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [d.LongDec, d.LatDec]
-                    }
-                }
-                local_conflict_geojson.push(to_push)
-            })
-            const thaa = {
-                'type': 'FeatureCollection',
-                'features': local_conflict_geojson
-            };
-            let hoveredPolygonId = null;
-            //draw polygons
-            map.on('load', () => {
-                // Add a data source containing GeoJSON data.
-                map.addSource('states', {
-                    'type': 'geojson',
-                    'data': thaa,
-                    'generateId': true //This ensures that all features have unique IDs
-                });
-                //circles for agreements
-                map.addLayer(
-                    {
-                        'id': 'population',
-                        'type': 'circle',
-                        'source': 'states',
-                        'paint': {
-                            "circle-opacity": 0.7,
-                            "circle-stroke-width": 2,
-                            'circle-radius': 7,
-                            "circle-stroke-color":
-                                [
-                                    'case',
-                                    ['boolean', ['feature-state', 'click'], false],
-                                    'white',
-                                    'black'
-                                ],
-                            'circle-color':
-                                [
-                                    'match',
-                                    ['get', 'stage'],
-                                    'Pre-negotiation',
-                                    '#ffdd7b',
-                                    'Ceasefire',
-                                    '#FF5733',
-                                    'Framework-substantive, partial',
-                                    '#3d693e',
-                                    'Implementation',
-                                    '#FF4081',
-                                    'Renewal',
-                                    '#4eb1ff',
-                                    'Other',
-                                    '#1d00ff',
-                                    'gray'
-                                ]
-                        }
-                    },
+    <!-- <div class="legend">
+        <h4 id="filter_title">Filter by Stages</h4>
+    </div> -->
+    <div class="legend">
+        <div class="circle pre"></div> <span>Pre-negotiation</span>
+        <div class="circle cea"></div> <span>Ceasefire</span>
+        <div class="circle par"></div> <span>Partial</span>
+        <div class="circle imp"></div> <span>Implementation</span>
+        <div class="circle oth"></div> <span>Other</span>
+        <button id="mini_refresh" title="Reset"><i class="fa fa-refresh"></i></button>
+    </div>
 
 
-
-
-
-                    // Place polygons under labels, roads and buildings.
-                    // 'aeroway-polygon'
-                );
-
-                map.on('click', 'population', (e, i) => {
-                    if (e.features.length > 0) {
-                        if (hoveredPolygonId !== null) {
-                            map.setFeatureState(
-                                { source: 'states', id: hoveredPolygonId },
-                                { click: false }
-                            );
-                        }
-                        hoveredPolygonId = e.features[0].id;
-                        map.setFeatureState(
-                            { source: 'states', id: hoveredPolygonId },
-                            { click: true }
-                        );
-                    }
-                    d3.select("#description")
-                        .style("display", "none")
-                    map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], zoom: 6 });
-                    const description = e.features[0].properties
-                    d3.select("#peace_process")
-                        .transition().duration(800)
-                        .style("right", 3 + "px")
-                    d3.select("#info")
-                        .transition().duration(500)
-                        .style("right", - screen_width * 0.30 + "px")
-                    counter_collab = 0;
-
-                    d3.select("#peace_title")
-                        .html(description.p_process)
-                    d3.select("#process_stage")
-                        .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
-                    d3.select("#agreement")
-                        .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
-                    d3.select("#locale")
-                        .html(`<h5>Locale: </h5>` + `<p>` + description.text + `</p>`)
-                    d3.select("#desc")
-                        .html(`<h5>Description: </h5>` + `<p>` + description.description + `</p>`)
-
-                    $("#linkie").attr('href', description.link);
-                    $("#linkie1").attr('href', description.link1);
-                    $("#linkie2").attr('href', description.link2);
-                    $("#linkie3").attr('href', description.link3);
-
-                    let reduce_height = $("#peace_title").height() + 21;
-                    let img_height = $(".box").height() - 30;
-                    d3.select("#peace_title_div").style("height", stable_height - reduce_height + "px")
-                    d3.selectAll("#first_img, #second_img, #third_img, #four_img")
-                        .style("height", img_height + "px")
-                    d3.selectAll("#krava")
-                        .style("top", 10 + "px")
-
-                    //timeline
-                    let peace_instance = d3.groups(raw_data, function (r) {
-                        return r.PPName == description.p_process
-                    })
-                    let true_data;
-                    if (peace_instance[0][0] == true) {
-                        true_data = peace_instance[0][1]
-                    }
-                    else {
-                        true_data = peace_instance[1][1]
-                    }
-                    let peace_data = true_data;
-                    function sortByDateAscending(a, b) {
-                        return a.date - b.date;
-                    }
-                    let the_data = peace_data.sort(sortByDateAscending);
-                    let year_division = d3.groups(the_data, d => d.AgtId, d => d.date)
-                    x_scale.domain(d3.extent(year_division, function (d) { return d[1][0][0]; }))
-                        .nice();
-                    simulation.nodes(year_division)
-                    simulation.alpha(1).restart().tick();
-                    for (var i = 0; i < 200; ++i) { simulation.tick(); }
-                    const delaunay = d3.Delaunay.from(year_division, d => d.x, d => d.y),
-                        voronoi = delaunay.voronoi([0, 0, width, height]);
-                    //drawing x axis
-                    svg.selectAll(".myXaxis").transition().duration(500)
-                        .attr("transform", "translate(0," + height + ")")
-                        .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).tickSize(-height).ticks(5))
-                        .style("stroke-dasharray", "5 5")
-                        .selectAll("text")
-                        .attr("transform", "translate(0,-4)")
-                        .style("fill", "white")
-                        .style("text-anchor", "middle")
-                        .style("font-size", "12px")
-                        .style("font-family", "Montserrat");
-
-                    svg.selectAll('.my_circles')
-                        .data(year_division)
-                        .join('circle')
-                        .attr('cx', d => d.x)
-                        .attr('cy', d => d.y)
-                        .attr("class", "my_circles")
-                        .attr('r', function (d) {
-                            return 7
-                        })
-                        .style('fill', function (d) {
-                            let color_choice;
-                            switch (d[1][0][1][0].stage) {
-                                case "Pre-negotiation":
-                                    color_choice = '#ffdd7b';
-                                    break;
-                                case "Ceasefire":
-                                    color_choice = '#FF5733'
-                                    break;
-                                case "Framework-substantive, partial":
-                                    color_choice = '#3d693e'
-                                    break;
-                                case "Implementation":
-                                    color_choice = '#FF4081'
-                                    break;
-                                case "Renewal":
-                                    color_choice = '#4eb1ff'
-                                    break;
-                                case "Other":
-                                    color_choice = '#1d00ff'
-                                    break;
-                                default:
-                                    color_choice = 'gray'
-                            }
-                            return color_choice
-                        })
-                        .style('stroke', function (d) {
-                            if (d[1][0][1][0].AgtId == description.id) {
-                                return "white"
-                            }
-                            else {
-                                return "none"
-                            }
-                        })
-                        .style("cursor", "pointer")
-                        .style('stroke-width', 2)
-                        .on("mouseover", function (d, i) {
-                            console.log(i[1][0][1][0]);
-                            d3.select("#timeline_description")
-                                .style("display", "block")
-                                .style("left", d.x - 160 + "px")
-                                .style("top", d.y - 20 + "px")
-                                .html(i[1][0][1][0].Agt + ` (` + i[1][0][1][0].Dat + `)`)
-                        })
-                        .on("mouseleave", function (d, i) {
-                            d3.select("#timeline_description")
-                                .style("display", "none")
-                        })
-
-                    // svg.selectAll(".mybar")
-                    //     .data(almost_final, d => d)
-                    //     .join(
-                    //         enter => enter.append("rect")
-                    //             .attr("class", "mybar")
-                    //             .attr("x", d => x_scale(d[0]))
-                    //             .attr("y", the_height)
-                    //             .attr("rx", 3)
-                    //             .attr("height", 0)
-                    //             .attr("width", 1)
-                    //             .attr("fill", "white")
-                    //             .transition().duration(1000)
-                    //             .attr("y", function (d) {
-                    //                 return y(d[1].length)
-                    //             })
-                    //             .attr("height", d => the_height - y(d[1].length))
-                    //             .selection(),
-                    //         update => update
-                    //             .transition().duration(1000)
-                    //             .attr("x", d => x_scale(d[0]))
-                    //             .attr("y", function (d) {
-                    //                 return y(d[1].length)
-                    //             })
-                    //             .attr("width", 1)
-                    //             .attr("height", d => the_height - y(d[1].length))
-                    //             .selection(),
-                    //         exit => exit
-                    //             .transition().duration(500)
-                    //             .attr("y", the_height)
-                    //             .attr("height", 0)
-                    //             .remove()
-                    //     )
-
-                    d3.selectAll(".domain")
-                        .attr("visibility", "hidden")
-                })
-
-
-                legend_svg.selectAll(".legend_circle")
-                    .data(legend_array)
-                    .join("circle")
-                    .attr("cx", 0)
-                    .attr("cy", function (d, i) {
-                        return 130 - (i * 25 + 25)
-                    })
-                    .attr("r", 8)
-                    .style("cursor", "pointer")
-                    .style("fill", function (d) {
-                        if (d == "Pre-negotiation") {
-                            return "#ffdd7b"
-                        }
-                        else if (d == "Ceasefire") {
-                            return "#FF5733"
-                        }
-                        else if (d == "Framework-substantive, partial") {
-                            return "#3d693e"
-                        }
-                        else if (d == "Implementation") {
-                            return "#FF4081"
-                        }
-                        else if (d == "Other") {
-                            return "#1d00ff"
-                        }
-
-                    })
-                    .style("stroke", "none")
-                    .attr("class", "legend_circle")
-                    .on("click", function (i, d) {
-                        d3.selectAll(".legend_circle")
-                            .style("stroke", "none")
-                        map.setFilter('population', ['==', 'stage', d]);
-                        d3.select(this)
-                            .style("stroke", "white")
-                            .style("stroke-width", 2)
-                    })
-
-
-                map.on('mousemove', 'population', (e) => {
-                    map.getCanvas().style.cursor = 'pointer';
-                    const description = e.features[0].properties
-                    // if (e.features.length > 0) {
-                    //     if (hoveredPolygonId !== null) {
-                    //         map.setFeatureState(
-                    //             { source: 'states', id: hoveredPolygonId },
-                    //             { click: false }
-                    //         );
-                    //     }
-                    //     hoveredPolygonId = e.features[0].id;
-                    //     map.setFeatureState(
-                    //         { source: 'states', id: hoveredPolygonId },
-                    //         { click: true }
-                    //     );
-                    // }
-
-                    d3.select("#description")
-                        .style("display", "block")
-                        .style("left", e.point.x + 30 + "px")
-                        .style("top", e.point.y - 25 + "px")
-                        .html(description.agreement)
-                });
-
-                // Change it back to a pointer when it leaves.
-                map.on('mouseleave', 'population', () => {
-                    map.getCanvas().style.cursor = '';
-                    // if (hoveredPolygonId !== null) {
-                    //     map.setFeatureState(
-                    //         { source: 'states', id: hoveredPolygonId },
-                    //         { hover: false }
-                    //     );
-                    // }
-                    // hoveredPolygonId = null;
-                    d3.select("#description")
-                        .style("display", "none")
-                });
-
-                // refresh everything
-                d3.selectAll("#refresh_button, #mini_refresh_button").on("click", function (m) {
-                    d3.selectAll(".legend_circle")
-                        .style("stroke", "none")
-                    if (hoveredPolygonId !== null) {
-                        map.setFeatureState(
-                            { source: 'states', id: hoveredPolygonId },
-                            { click: false }
-                        );
-                    }
-                    hoveredPolygonId = null;
-                    map.flyTo({ center: [40.137343, 25.137451], zoom: 3 });
-                    // d3.select("#big_title").text("Conflict and Peace Process Map")
-                    d3.selectAll("#peace_process, #info")
-                        .transition().duration(800)
-                        .style("right", - screen_width * 0.30 + "px")
-                    counter_collab = 0;
-                    map.setFilter('population', null)
-                })
-
-                // map.addSource('states', {
-                //     'type': 'geojson',
-                //     'data': geo_data,
-                //     'generateId': true //This ensures that all features have unique IDs
-                // });
-                // Add a new layer to visualize the polygon.
-                // map.addLayer({
-                //     'id': 'state-fills',
-                //     'type': 'fill',
-                //     'source': 'states',
-                //     'layout': {},
-                //     'paint': {
-                //         'fill-color': '#006297',
-                //         'fill-opacity': 0.5
-                //     },
-                //     'filter': ['in', 'ADMIN', ...country_array]
-
-                // });
-                // map.addLayer({
-                //     'id': 'outline',
-                //     'type': 'line',
-                //     'source': 'states',
-                //     'layout': {},
-                //     'paint': {
-                //         'line-color': 'black',
-                //         'line-width': [
-                //             'case',
-                //             ['boolean', ['feature-state', 'hover'], false],
-                //             2,
-                //             0.5
-                //         ],
-                //     }
-                // });
-
-                // for (const marker of raw_data) {
-                //     if (marker.LongDec !== "999") {
-                //         let coord = [marker.LongDec, marker.LatDec]
-                //         const el = document.createElement('div');
-                //         const width = 10;
-                //         const height = 10;
-                //         el.className = 'marker';
-                //         el.style.backgroundImage = `url(img/circle.png)`;
-                //         el.style.width = `${width}px`;
-                //         el.style.height = `${height}px`;
-                //         el.style.backgroundSize = '100%';
-                //         el.style.cursor = "pointer"
-
-                //         new mapboxgl.Marker(el)
-                //             .setLngLat(coord)
-                //             .addTo(map);
-                //     }
-                // }
-
-            })
-
-
-        });
-    </script>
+    <script src="js/index.js"></script>
 </body>
 
 </html>

@@ -81,7 +81,7 @@ h3 {
     color: white;
     margin: auto;
     background-color: black;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
 }
 
@@ -94,11 +94,7 @@ h3 {
 
 #peace_title_div {
     overflow-y: auto;
-    box-shadow: inset 0 0 5px #414141;
-}
-
-#timeline {
-    box-shadow: inset 0 0 5px #414141;
+    /* box-shadow: inset 0 0 5px #414141; */
 }
 
 #peace_title_div::-webkit-scrollbar {
@@ -131,7 +127,7 @@ h5 {
     right: 5px;
     background-color: #04AA6D;
     border: none;
-    color: white;
+    color: black;
     padding: 5px 20px;
     text-align: center;
     text-decoration: none;
@@ -143,11 +139,10 @@ h5 {
 
 #mini_refresh_button {
     position: absolute;
-    top: 5px;
     right: 5px;
     background-color: #04AA6D;
     border: none;
-    color: white;
+    color: black;
     padding: 3px 10px;
     text-align: center;
     text-decoration: none;
@@ -158,11 +153,18 @@ h5 {
 }
 
 #refresh_button:hover {
-    background-color: #006297
+    background-color: #006297;
+    color: white;
 }
 
 #mini_refresh_button:hover {
-    background-color: #006297
+    background-color: #006297;
+    color: white;
+}
+
+#mini_refresh:hover {
+    background-color: #006297;
+    color: white;
 }
 
 #info_button {
@@ -182,7 +184,8 @@ h5 {
 }
 
 #info_button:hover {
-    background-color: #006297
+    background-color: #006297;
+    color: white;
 }
 
 pre {
@@ -221,31 +224,6 @@ pre a:-webkit-any-link {
     right: 50px;
 }
 
-.legend {
-    position: relative;
-    border-radius: 5px;
-    background-color: #181818;
-    border-radius: 5px;
-    left: 5px;
-    bottom: 35px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    color: #fff;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    padding: 10px;
-    position: absolute;
-    z-index: 900;
-    font-family: "Montserrat";
-}
-
-.legend div span {
-    border-radius: 50%;
-    display: inline-block;
-    height: 13px;
-    margin-right: 5px;
-    width: 13px;
-}
-
-
 #peace_process {
     overflow: hidden;
     background-color: black;
@@ -264,14 +242,14 @@ pre a:-webkit-any-link {
     position: absolute;
     top: 47px;
     z-index: 900;
-    border-radius: 5px;
+    border-radius: 4px;
     padding: 0px;
 }
 
 #info_content,
 #peace_content {
     overflow-y: auto;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 #peace_content::-webkit-scrollbar {
@@ -293,7 +271,8 @@ pre a:-webkit-any-link {
     background: rgb(230, 103, 103);
 }
 
-#description, #timeline_description {
+#description,
+#timeline_description {
     position: absolute;
     font-size: 12px;
     z-index: 999;
@@ -325,8 +304,9 @@ p {
 }
 
 .third {
-    background-color: rgb(27, 27, 27);
-    border-radius: 5px;
+    position: relative;
+    background-color: #272727;
+    border-radius: 4px;
     margin: 4px;
 }
 
@@ -355,24 +335,24 @@ p {
 }
 
 .box {
-    background-color: rgb(27, 27, 27);
+    background-color: #272727;
     flex: 1;
     border: 2px solid black;
     border-radius: 4px;
-    text-align: center; 
-    padding: 2px;
-    box-shadow: inset 0 0 5px #414141;
-  }
+    text-align: center;
+    padding: 0px;
+    /* box-shadow: inset 0 0 5px #414141; */
+}
 
-  #info_content {
-    background-color: rgb(27, 27, 27);
-    box-shadow: inset 0 0 5px #414141;
+#info_content {
+    background-color: #272727;
+    /* box-shadow: inset 0 0 5px #414141; */
     font-size: 14px;
     margin: 4px;
 
-  }
+}
 
- #info_content::-webkit-scrollbar {
+#info_content::-webkit-scrollbar {
     width: 10px;
 }
 
@@ -392,43 +372,318 @@ p {
 }
 
 
- #img_text {
+#img_text {
     font-size: 12px;
- }
+}
 
- #krava {
+#krava {
     position: relative;
- }
+}
 
- #info_content {
+#info_content {
     padding: 20px;
- }
+}
 
- #first_link:link {
+#first_link:link {
     color: green;
     background-color: transparent;
     text-decoration: none;
-  }
-  
-  #first_link:visited {
+}
+
+#first_link:visited {
     color: steelblue;
     background-color: transparent;
     text-decoration: none;
-  }
-  
-  #first_link:hover {
+}
+
+#first_link:hover {
     color: yellow;
     background-color: transparent;
     text-decoration: none;
-  }
+}
 
-  .box:hover {
+.box:hover {
     box-shadow: inset 0 0 5px #baacac;
     cursor: pointer;
-  }
-  
-  #first_link:active {
+}
+
+#first_link:active {
     color: red;
     background-color: transparent;
     text-decoration: none;
-  }
+}
+
+a {
+    cursor: pointer;
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+    border-radius: 2px;
+    font-family: "Montserrat";
+    background-color: #313461;
+    color: white;
+    padding: 8px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    z-index: 9;
+    position: relative;
+    top: 10px;
+    left: 5px;
+    display: inline-block;
+    padding: 2px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    border-radius: 2px;
+    display: none;
+    position: absolute;
+    background-color: #0F1826;
+    min-width: 115px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: white;
+    padding: 5px 5px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #717171
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #04AA6D;
+}
+
+/* #timelines {
+    box-shadow: inset 0 0 5px #414141;
+} */
+
+#chart,
+#timeline {
+    position: absolute;
+}
+
+#timeline_buttons {
+    position: absolute;
+    right: 45px;
+    top: 4px;
+}
+
+#bee_time_btn {
+    position: absolute;
+    background-color: #04AA6D;
+    border: none;
+    color: black;
+    padding: 1px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+#bee_time_btn:hover {
+    background-color: #006297;
+    color: white;
+}
+
+.fa-arrows-h {
+    font-size: 20px;
+}
+
+#main_timeline {
+    position: relative;
+    z-index: 999;
+    background-color: #272727;
+    border-radius: 3px;
+    margin: 3px;
+    padding: 10px;
+}
+
+#filters {
+    position: absolute;
+    top: 47px;
+    padding: 1px;
+    background-color: black;
+    border-radius: 4px;
+}
+
+#filter_button {
+    position: absolute;
+    top: 21px;
+    left: 0px;
+    z-index: 999;
+    border-radius: 5px 5px 0px 0px;
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform-origin: bottom left;
+    background-color: #04AA6D;
+    color: black;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    font-family: 'Montserrat';
+    font-weight: bold;
+}
+
+#filter_button:hover {
+    background-color: #006297
+}
+
+
+.filter_local {
+    position: relative;
+    top: 0px;
+    margin: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    padding: 10px;
+    z-index: 900;
+    font-family: "Montserrat";
+    border-radius: 3px;
+    background-color: #272727;
+
+}
+
+/* The container */
+.container {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 15px;
+    width: 15px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked~.checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+    top: 3px;
+    left: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: white;
+}
+
+.legend {
+    display: flex;
+    gap: 10px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    position: absolute;
+    border-radius: 5px;
+    bottom: 0;
+}
+.legend .circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+.circle.pre {
+    background-color: #ffdd7b;
+}
+.circle.cea {
+    background-color: #FF5733;
+}
+.circle.par {
+    background-color: #3d693e;
+}
+.circle.imp {
+    background-color: #FF4081;
+}
+.circle.oth{
+    background-color: #1d00ff;
+}
+
+span {
+    font-size: 12px;
+    left: 10px;
+}
+
+#mini_refresh {
+    display: inline-block;
+    background-color: #04AA6D;
+    border: none;
+    color: black;
+    padding: 2px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+}
