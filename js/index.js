@@ -685,7 +685,7 @@ Promise.all([
         })
 
         d3.select("#nat").on("click", function () {
-            map.setFilter('population', ['==', 'national', "1"]);
+            map.setFilter('population', ['==', 'national', "Y"]);
         })
         d3.select("#rit").on("click", function () {
             map.setFilter('population', ['==', 'rit', "1"]);
@@ -744,6 +744,8 @@ Promise.all([
         d3.selectAll("#refresh_button, #mini_refresh_button, #mini_refresh").on("click", function (m) {
             d3.selectAll(".legend_circle")
                 .style("stroke", "none")
+                const radios = document.querySelectorAll('input.radio');
+                radios.forEach(radio => radio.checked = false);
             if (hoveredPolygonId !== null) {
                 map.setFeatureState(
                     { source: 'states', id: hoveredPolygonId },

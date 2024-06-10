@@ -131,33 +131,30 @@
 
     <div id="filters">
         <div class="filter_local">
-            <button id="mini_refresh_button" title="Reset" style="top: 5px;"><i class="fa fa-refresh"></i></button>
             <h4 style="margin-bottom: 7px; margin-top: 0px; font-size: 14px;">Filter by Local Issues</h4>
-            <label class="container">National Link
-                <input type="radio" id="nat" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="container">Ritual/Prayer
-                <input type="radio" id="rit" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="container">Grievance
-                <input type="radio" id="gri" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="container">Cattle
-                <input type="radio" id="cat" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="container">Social Cover
-                <input type="radio" id="cov" name="radio">
-                <span class="checkmark"></span>
-            </label>
+            <form>
+                <label>
+                    <input type="radio" name="colors" class="radio" id="nat">National Link<br>
+                </label>
+                <label>
+                    <input type="radio" name="colors" class="radio" id="rit">Ritual/Prayer<br>
+                </label>
+                <label>
+                    <input type="radio" name="colors" class="radio" id="gri">Grievance<br>
+                </label>
+                <label>
+                    <input type="radio" name="colors" class="radio" id="cat">Cattle<br>
+                </label>
+                <label>
+                    <input type="radio" name="colors" class="radio" id="cov">Social Cover
+                </label>
+            </form>
         </div>
 
         <div id="main_timeline">
             <h4 id="filter_title" style="color: white; margin-bottom: 7px; margin-top: 0px; font-size: 14px;">Filter by
                 Year</h4>
+            <button id="mini_refresh_button" title="Reset" style="bottom: 5px;"><i class="fa fa-refresh"></i></button>
         </div>
 
     </div>
