@@ -675,7 +675,7 @@ h4 {
  
   /* Position the tooltip text - see examples below! */
   position: absolute;
-  left: 200px;
+  left: 150px;
   z-index: 999;
 }
 

@@ -632,7 +632,7 @@ Promise.all([
             .attr("y", function (d) { return main_y(d[0]); })
             .attr("width", function (d) { return main_x(d[1].length); })
             .attr("height", main_y.bandwidth())
-            .attr("rx", "2px")
+            .attr("rx", "1px")
             .attr("fill", "white")
             .attr("class", "mybar")
             .attr("cursor", "pointer")
@@ -707,7 +707,6 @@ Promise.all([
         d3.select("#cov").on("click", function () {
             map.setFilter('population', ['==', 'cover', "1"]);
         })
-
 
 
         map.on('mousemove', 'population', (e) => {
