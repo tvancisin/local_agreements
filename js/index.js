@@ -19,12 +19,12 @@ d3.selectAll("#filters")
     .style("left", - (screen_width * 0.2 + 20) + "px")
 d3.select("#info_content").style("height", details_height - 90 + "px")
 d3.selectAll(".third")
-    .style("height", (details_height - 16) * 0.45 + "px")
+    .style("height", (details_height - 60) * 0.45 + "px")
 d3.select("#links")
     .style("height", details_height * 0.11 + "px")
 d3.select("#chart").style("left", screen_width30 + "px")
-d3.selectAll(".filter_local").style("height", details_height / 5 + "px")
-d3.selectAll("#main_timeline").style("height", details_height - (details_height / 5) - 85 + "px")
+d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
+d3.selectAll("#main_timeline").style("height", details_height - (details_height / 5) - 110 + "px")
 
 const stable_height = (details_height - 16) * 0.45;
 const parseTime = d3.timeParse("%Y-%m-%d");
@@ -623,7 +623,7 @@ Promise.all([
                 .attr("visibility", "hidden")
         })
 
-
+        let clicked_bar = 0;
         // main timeline draw bars
         main_timeline.selectAll("mybar")
             .data(main_timeline_year_group)
@@ -634,14 +634,22 @@ Promise.all([
             .attr("height", main_y.bandwidth())
             .attr("rx", "2px")
             .attr("fill", "white")
+            .attr("class", "mybar")
             .attr("cursor", "pointer")
             .on("mouseover", function (d, i) {
-                d3.select(this).style("fill", "#006297")
+                if (clicked_bar !== 1) {
+                    d3.select(this).style("fill", "#006297")
+                }
             })
             .on("mouseout", function (d, i) {
-                d3.select(this).style("fill", "white")
+                if (clicked_bar !== 1) {
+                    d3.select(this).style("fill", "white")
+                }
             })
             .on("click", function (d, i) {
+                clicked_bar = 1;
+                d3.selectAll(".mybar").style("fill", "white")
+                d3.select(this).style("fill", "#006297")
                 map.setFilter('population', ['==', 'year', i[0]]);
             })
 
@@ -744,8 +752,10 @@ Promise.all([
         d3.selectAll("#refresh_button, #mini_refresh_button, #mini_refresh").on("click", function (m) {
             d3.selectAll(".legend_circle")
                 .style("stroke", "none")
-                const radios = document.querySelectorAll('input.radio');
-                radios.forEach(radio => radio.checked = false);
+            clicked_bar = 0;
+            d3.selectAll(".mybar").style("fill", "white")
+            const radios = document.querySelectorAll('input.radio');
+            radios.forEach(radio => radio.checked = false);
             if (hoveredPolygonId !== null) {
                 map.setFeatureState(
                     { source: 'states', id: hoveredPolygonId },
