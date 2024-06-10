@@ -668,7 +668,7 @@ Promise.all([
             .data(main_timeline_year_group)
             .join("text")
             .attr("x", -2)
-            .attr("y", function (d) { return main_y(d[0]); })
+            .attr("y", function (d) { return main_y(d[0]) -2; })
             .text(d => d[0])
             .attr("fill", "white")
             .attr("text-anchor", "end")
