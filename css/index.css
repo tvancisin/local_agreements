@@ -514,7 +514,7 @@ a {
 
 #main_timeline {
     position: relative;
-    z-index: 999;
+    z-index: 99;
     background-color: #272727;
     border-radius: 3px;
     margin: 3px;
@@ -522,6 +522,7 @@ a {
 }
 
 #filters {
+    z-index: 999;
     position: absolute;
     top: 47px;
     padding: 1px;
@@ -533,7 +534,7 @@ a {
     position: absolute;
     top: 21px;
     left: 0px;
-    z-index: 999;
+    z-index: 990;
     border-radius: 5px 5px 0px 0px;
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -588,11 +589,12 @@ a {
 
 input[type="radio"] {
     vertical-align: bottom;
-  }
+}
 
-  label {
-    display: block; 
-    margin-bottom: 5px; 
+label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 
 form {
@@ -609,6 +611,7 @@ form {
     border-radius: 5px;
     bottom: 0;
 }
+
 .legend .circle {
     width: 15px;
     height: 15px;
@@ -616,19 +619,24 @@ form {
     display: inline-block;
     cursor: pointer;
 }
+
 .circle.pre {
     background-color: #ffdd7b;
 }
+
 .circle.cea {
     background-color: #FF5733;
 }
+
 .circle.par {
     background-color: #3d693e;
 }
+
 .circle.imp {
     background-color: #FF4081;
 }
-.circle.oth{
+
+.circle.oth {
     background-color: #1d00ff;
 }
 
@@ -653,4 +661,25 @@ span {
 
 h4 {
     text-align: center;
+}
+
+/* Tooltip text */
+.tooltiptext {
+  visibility: hidden;
+  width: 300px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 5px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  left: 200px;
+  z-index: 999;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+label:hover .tooltiptext {
+  visibility: visible;
 }
