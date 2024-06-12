@@ -187,7 +187,7 @@ h5 {
 #filter_button {
     position: absolute;
     top: 20px;
-    left: 0px;
+    left: -2px;
     z-index: 990;
     border-radius: 5px 5px 0px 0px;
     -moz-transform: rotate(90deg);
@@ -599,6 +599,7 @@ form {
 
 .legend {
     display: flex;
+    box-shadow: 0 0 3px #4e4a69;
     height: 23px;
     gap: 10px;
     padding: 5px;
@@ -606,7 +607,9 @@ form {
     color: white;
     position: absolute;
     border-radius: 2px;
-    bottom: 0;
+    bottom: -1px;
+    left: -1px;
+    padding-left: 10px;
 }
 
 .legend .circle {
