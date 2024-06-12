@@ -81,7 +81,7 @@ h3 {
     color: white;
     margin: auto;
     background-color: black;
-    padding: 5px;
+    padding: 4px;
     text-align: center;
 }
 
@@ -119,6 +119,21 @@ h3 {
 h5 {
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+#bee_time_btn {
+    position: absolute;
+    background-color: #DD1C33;
+    border: none;
+    color: black;
+    padding: 0px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 999;
+    height: 20px;
 }
 
 #refresh_button {
@@ -206,6 +221,7 @@ h5 {
     cursor: pointer;
 }
 
+#bee_time_btn:hover,
 #refresh_button:hover,
 #mini_refresh_button:hover,
 #mini_refresh:hover,
@@ -337,7 +353,7 @@ p {
     position: relative;
     background-color: #171d26;
     border-radius: 2px;
-    margin: 3px;
+    margin: 4px;
 }
 
 .tick line {
@@ -502,10 +518,6 @@ a {
     background-color: #04AA6D;
 }
 
-/* #timelines {
-    box-shadow: inset 0 0 5px #414141;
-} */
-
 #chart,
 #timeline {
     position: absolute;
@@ -513,29 +525,10 @@ a {
 
 #timeline_buttons {
     position: absolute;
-    right: 45px;
-    top: 4px;
+    top: -22px;
+    right: 40px;
 }
 
-#bee_time_btn {
-    position: absolute;
-    background-color: #04AA6D;
-    border: none;
-    color: black;
-    padding: 1px 10px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 2px;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    z-index: 999;
-}
-
-#bee_time_btn:hover {
-    background-color: #006297;
-    color: white;
-}
 
 .fa-arrows-h {
     font-size: 20px;

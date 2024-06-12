@@ -46,7 +46,7 @@ var main_x = d3.scaleLinear()
 let messy_svg = d3.select("#chart")
     .append("svg")
     .attr("id", "svg")
-    .attr("width", screen_width30 - 8)
+    .attr("width", screen_width30 - 10)
     .attr("height", height)
 messy_svg.append("g")
     .attr("class", "xAxis")
@@ -69,7 +69,7 @@ let scaleY = d3.scaleLinear()
     .domain(d3.extent(sequence, d => d.position))
     .range([20, height - 20])
 let scaleX = d3.scaleTime()
-    .range([0, width - 10])
+    .range([5, width - 15])
 
 
 // append beeswarm svg
@@ -404,7 +404,7 @@ Promise.all([
 
             //drawing x axis for beeswarm
             svg.selectAll(".myXaxis").transition().duration(500)
-                .attr("transform", "translate(0," + (height - 20) + ")")
+                .attr("transform", "translate(10," + (height - 20) + ")")
                 .call(d3.axisBottom(x_scale).tickFormat(d3.timeFormat("%Y")).tickSize(-height).ticks(5))
                 .style("stroke-dasharray", "5 5")
                 .selectAll("text")
@@ -485,7 +485,7 @@ Promise.all([
             scaleX.domain([parseTime(start_year), parseTime(end_year)])
 
             messy_svg.selectAll(".xAxis").transition().duration(500)
-                .attr("transform", "translate(0," + (height - 20) + ")")
+                .attr("transform", "translate(10," + (height - 20) + ")")
                 .call(d3.axisBottom(scaleX).tickFormat(d3.timeFormat("%Y")).ticks(5))
                 .selectAll("text")
                 .attr("transform", "translate(0,0)")
@@ -506,7 +506,7 @@ Promise.all([
                 .attr("stroke-width", 0.5)
                 .attr("stroke-dasharray", "5 5")
                 .attr("opacity", 0.3)
-                .attr("x1", 0)
+                .attr("x1", 10)
                 .attr("x2", width)
 
             //legend
@@ -532,7 +532,7 @@ Promise.all([
                     }
                 })
                 .attr("fill", "white")
-                .attr("x", width + 20)
+                .attr("x", width + 25)
                 .attr("dy", "10pt")
 
             //compute line segments
