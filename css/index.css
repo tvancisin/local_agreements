@@ -89,7 +89,8 @@ h3 {
 #locale,
 #agreement,
 #desc {
-    padding: 5px;
+    padding: 8px;
+    padding-bottom: 0px;
 }
 
 #peace_title_div {
