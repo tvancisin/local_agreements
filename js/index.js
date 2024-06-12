@@ -648,6 +648,9 @@ Promise.all([
             })
             .on("click", function (d, i) {
                 clicked_bar = 1;
+                d3.selectAll(".circle").style("border", "none")
+                const radios = document.querySelectorAll('input.radio');
+                radios.forEach(radio => radio.checked = false);
                 d3.selectAll(".mybar").style("fill", "white")
                 d3.select(this).style("fill", "#006297")
                 map.setFilter('population', ['==', 'year', i[0]]);
@@ -668,44 +671,71 @@ Promise.all([
             .data(main_timeline_year_group)
             .join("text")
             .attr("x", -2)
-            .attr("y", function (d) { return main_y(d[0]) -2; })
+            .attr("y", function (d) { return main_y(d[0]) - 2; })
             .text(d => d[0])
             .attr("fill", "white")
             .attr("text-anchor", "end")
             .attr("font-size", "11px")
             .attr("dy", "11px")
 
+        const refresh_filter = function () {
+            d3.selectAll(".circle").style("border", "none")
+            d3.selectAll(".mybar").style("fill", "white")
+            const radios = document.querySelectorAll('input.radio');
+            radios.forEach(radio => radio.checked = false);
+        }
+
         // filter by stages
         d3.select(".pre").on("click", function () {
+            refresh_filter();
+            d3.select(this).style("border", "solid")
             map.setFilter('population', ['==', 'stage', "Pre-negotiation"]);
         })
         d3.select(".cea").on("click", function () {
+            refresh_filter();
+            d3.select(this).style("border", "solid")
             map.setFilter('population', ['==', 'stage', "Ceasefire"]);
         })
         d3.select(".par").on("click", function () {
+            refresh_filter();
+            d3.select(this).style("border", "solid")
             map.setFilter('population', ['==', 'stage', "Framework-substantive, partial"]);
         })
         d3.select(".imp").on("click", function () {
+            refresh_filter();
+            d3.select(this).style("border", "solid")
             map.setFilter('population', ['==', 'stage', "Implementation"]);
         })
         d3.select(".oth").on("click", function () {
+            refresh_filter();
+            d3.select(this).style("border", "solid")
             map.setFilter('population', ['==', 'stage', "Other"]);
         })
 
         d3.select("#nat").on("click", function () {
             map.setFilter('population', ['==', 'national', "Y"]);
+            d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
         })
         d3.select("#rit").on("click", function () {
             map.setFilter('population', ['==', 'rit', "1"]);
+            d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
         })
         d3.select("#gri").on("click", function () {
             map.setFilter('population', ['==', 'grieve', "1"]);
+            d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
         })
         d3.select("#cat").on("click", function () {
             map.setFilter('population', ['==', 'cattle', "1"]);
+            d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
         })
         d3.select("#cov").on("click", function () {
             map.setFilter('population', ['==', 'cover', "1"]);
+            d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
         })
 
 
@@ -753,6 +783,7 @@ Promise.all([
                 .style("stroke", "none")
             clicked_bar = 0;
             d3.selectAll(".mybar").style("fill", "white")
+            d3.selectAll(".circle").style("border", "none")
             const radios = document.querySelectorAll('input.radio');
             radios.forEach(radio => radio.checked = false);
             if (hoveredPolygonId !== null) {
