@@ -121,7 +121,7 @@ d3.select("#filter_button").on("click", function () {
         d3.select("#filter_button")
             .transition().duration(500)
             .style("left", (screen_width * 0.2 + 8) + "px")
-            .style("background-color", "#006297")
+            .style("background-color", "#AA4197")
             .text("Hide")
         d3.select("#filters")
             .transition().duration(500)
@@ -134,7 +134,7 @@ d3.select("#filter_button").on("click", function () {
         d3.select("#filter_button")
             .transition().duration(500)
             .style("left", 0 + "px")
-            .style("background-color", "#04AA6D")
+            .style("background-color", "#DD1C33")
             .text("Filter")
     }
 })

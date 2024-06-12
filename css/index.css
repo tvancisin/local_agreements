@@ -125,7 +125,7 @@ h5 {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #04AA6D;
+    background-color: #DD1C33;
     border: none;
     color: black;
     padding: 5px 20px;
@@ -140,7 +140,7 @@ h5 {
 #mini_refresh_button {
     position: absolute;
     right: 5px;
-    background-color: #04AA6D;
+    background-color: #DD1C33;
     border: none;
     color: black;
     padding: 3px 10px;
@@ -152,26 +152,11 @@ h5 {
     cursor: pointer;
 }
 
-#refresh_button:hover {
-    background-color: #006297;
-    color: white;
-}
-
-#mini_refresh_button:hover {
-    background-color: #006297;
-    color: white;
-}
-
-#mini_refresh:hover {
-    background-color: #006297;
-    color: white;
-}
-
 #info_button {
     position: absolute;
     top: 5px;
     right: 70px;
-    background-color: #04AA6D;
+    background-color: #DD1C33;
     border: none;
     color: black;
     padding: 5px 20px;
@@ -183,8 +168,50 @@ h5 {
     border-radius: 2px;
 }
 
-#info_button:hover {
-    background-color: #006297;
+#filter_button {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    z-index: 990;
+    border-radius: 5px 5px 0px 0px;
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform-origin: bottom left;
+    background-color: #DD1C33;
+    color: black;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    font-family: 'Montserrat';
+    font-weight: bold;
+}
+
+#mini_refresh {
+    display: inline-block;
+    background-color: #DD1C33;
+    border: none;
+    color: black;
+    padding: 1px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#refresh_button:hover,
+#mini_refresh_button:hover,
+#mini_refresh:hover,
+#info_button:hover,
+#filter_button:hover {
+    background-color: #AA4197;
     color: white;
 }
 
@@ -231,19 +258,23 @@ pre a:-webkit-any-link {
     position: absolute;
     top: 47px;
     z-index: 900;
-    border-radius: 5px;
     padding: 0px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 3px #3d3a52;
+        box-shadow: 0 0 3px #4e4a69;
 }
 
 #info {
     overflow: hidden;
-    background-color: black;
     color: white;
     position: absolute;
     top: 47px;
     z-index: 900;
-    border-radius: 4px;
     padding: 0px;
+    background-color: black;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 3px #3d3a52;
+        box-shadow: 0 0 3px #4e4a69;
 }
 
 #info_content,
@@ -294,9 +325,8 @@ p {
 }
 
 #filter_title {
-    margin-top: 0px;
-    margin-bottom: 5px;
     font-size: 14px;
+    margin: auto;
 }
 
 #peace {
@@ -305,9 +335,9 @@ p {
 
 .third {
     position: relative;
-    background-color: #272727;
-    border-radius: 4px;
-    margin: 4px;
+    background-color: #171d26;
+    border-radius: 2px;
+    margin: 3px;
 }
 
 .tick line {
@@ -335,20 +365,19 @@ p {
 }
 
 .box {
-    background-color: #272727;
+    background-color: #171d26;
     flex: 1;
     border: 2px solid black;
-    border-radius: 4px;
+    border-radius: 2px;
     text-align: center;
     padding: 0px;
     /* box-shadow: inset 0 0 5px #414141; */
 }
 
 #info_content {
-    background-color: #272727;
-    /* box-shadow: inset 0 0 5px #414141; */
+    background-color: #171d26;
     font-size: 14px;
-    margin: 4px;
+    margin: 3px;
 
 }
 
@@ -515,7 +544,7 @@ a {
 #main_timeline {
     position: relative;
     z-index: 99;
-    background-color: #272727;
+    background-color: #171d26;
     border-radius: 3px;
     margin: 3px;
     padding: 10px;
@@ -527,37 +556,10 @@ a {
     top: 47px;
     padding: 1px;
     background-color: black;
-    border-radius: 4px;
-}
-
-#filter_button {
-    position: absolute;
-    top: 21px;
-    left: 0px;
-    z-index: 990;
-    border-radius: 5px 5px 0px 0px;
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
-    transform-origin: bottom left;
-    background-color: #04AA6D;
-    color: black;
-    padding: 5px 20px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
     border-radius: 2px;
-    cursor: pointer;
-    border: none;
-    font-family: 'Montserrat';
-    font-weight: bold;
+    -webkit-box-shadow: 0 0 3px #3d3a52;
+    box-shadow: 0 0 3px #4e4a69;
 }
-
-#filter_button:hover {
-    background-color: #006297
-}
-
 
 .filter_local {
     position: relative;
@@ -569,7 +571,7 @@ a {
     z-index: 900;
     font-family: "Montserrat";
     border-radius: 3px;
-    background-color: #272727;
+    background-color: #171d26;
 
 }
 
@@ -608,7 +610,7 @@ form {
     background-color: rgba(0, 0, 0, 1);
     color: white;
     position: absolute;
-    border-radius: 5px;
+    border-radius: 2px;
     bottom: 0;
 }
 
@@ -618,6 +620,7 @@ form {
     border-radius: 50%;
     display: inline-block;
     cursor: pointer;
+    margin: auto;
 }
 
 .circle.pre {
@@ -641,23 +644,11 @@ form {
 }
 
 span {
+    margin: auto;
     font-size: 12px;
     left: 10px;
 }
 
-#mini_refresh {
-    display: inline-block;
-    background-color: #04AA6D;
-    border: none;
-    color: black;
-    padding: 1px 10px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 2px;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-}
 
 h4 {
     text-align: center;
@@ -665,21 +656,25 @@ h4 {
 
 /* Tooltip text */
 .tooltiptext {
-  visibility: hidden;
-  width: 300px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 5px;
- 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  left: 150px;
-  z-index: 999;
+    visibility: hidden;
+    width: 300px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 5px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    left: 150px;
+    z-index: 999;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 label:hover .tooltiptext {
-  visibility: visible;
+    visibility: visible;
+}
+
+input {
+    cursor: pointer;
 }
