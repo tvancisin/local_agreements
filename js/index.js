@@ -677,7 +677,7 @@ Promise.all([
             .text(d => d[0])
             .attr("fill", "white")
             .attr("text-anchor", "end")
-            .attr("font-size", "12px")
+            .attr("font-size", "11px")
             // .attr("dy", "12px")
 
         const refresh_filter = function () {
