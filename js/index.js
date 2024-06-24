@@ -120,8 +120,8 @@ d3.select("#filter_button").on("click", function () {
     if (counter % 2 !== 0) {
         d3.select("#filter_button")
             .transition().duration(500)
-            .style("left", (screen_width * 0.2 + 5) + "px")
-            .style("background-color", "#AA4197")
+            .style("left", (screen_width * 0.2 + 8) + "px")
+            // .style("background-color", "#AA4197")
             .text("Hide")
         d3.select("#filters")
             .transition().duration(500)
@@ -133,8 +133,8 @@ d3.select("#filter_button").on("click", function () {
             .style("left", - (screen_width * 0.2 + 20) + "px")
         d3.select("#filter_button")
             .transition().duration(500)
-            .style("left", -2 + "px")
-            .style("background-color", "#DD1C33")
+            .style("left", 0 + "px")
+            // .style("background-color", "#DD1C33")
             .text("Filter")
     }
 })
@@ -163,9 +163,11 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqM
 const map = new mapboxgl.Map({
     container: 'map',
     // style: 'mapbox://styles/mapbox/dark-v11',
-    style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
+    // style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
+    style: 'mapbox://styles/sashagaribaldy/clxstrxes00qv01pf8dgl4o20',
     center: [40.137343, 25.137451],
-    zoom: 2.5,
+    zoom: 2.7,
+    pitch: 10, // pitch in degrees
     attributionControl: false,
     logoPosition: "bottom-right"
 });
@@ -308,17 +310,17 @@ Promise.all([
                             'match',
                             ['get', 'stage'],
                             'Pre-negotiation',
-                            '#ffdd7b',
+                            '#016099',
                             'Ceasefire',
-                            '#FF5733',
+                            '#df1f36',
                             'Framework-substantive, partial',
-                            '#3d693e',
+                            '#3aae2a',
                             'Implementation',
-                            '#FF4081',
+                            '#7b8ad6',
                             'Renewal',
-                            '#4eb1ff',
+                            '#fd8189',
                             'Other',
-                            '#1d00ff',
+                            '#34495e',
                             'gray'
                         ]
                 }
@@ -428,22 +430,22 @@ Promise.all([
                     let color_choice;
                     switch (d[1][0][1][0].stage_label) {
                         case "Pre-negotiation":
-                            color_choice = '#ffdd7b';
+                            color_choice = '#016099'
                             break;
                         case "Ceasefire":
-                            color_choice = '#FF5733'
+                            color_choice = '#df1f36'
                             break;
                         case "Framework-substantive, partial":
-                            color_choice = '#3d693e'
+                            color_choice = '#3aae2a'
                             break;
                         case "Implementation":
-                            color_choice = '#FF4081'
+                            color_choice = '#7b8ad6'
                             break;
                         case "Renewal":
-                            color_choice = '#4eb1ff'
+                            color_choice = '#fd8189'
                             break;
                         case "Other":
-                            color_choice = '#1d00ff'
+                            color_choice = '#34495e'
                             break;
                         default:
                             color_choice = 'gray'
@@ -600,7 +602,7 @@ Promise.all([
                 })
                 .style('fill', function (d) {
                     if (d.AgtId == description.id) {
-                        return "yellow"
+                        return "white"
                     }
                     else {
                         return "gray"
@@ -660,7 +662,7 @@ Promise.all([
             .data(main_timeline_year_group)
             .join("text")
             .attr("x", function (d) { return main_x(d[1].length) + 10 })
-            .attr("y", function (d) { return main_y(d[0]) + 5; })
+            .attr("y", function (d) { return main_y(d[0]) + 8; })
             .text(d => d[1].length)
             .attr("fill", "white")
             .attr("font-size", "10px")
@@ -670,13 +672,13 @@ Promise.all([
             .selectAll("mybar_text_year")
             .data(main_timeline_year_group)
             .join("text")
-            .attr("x", -2)
-            .attr("y", function (d) { return main_y(d[0]) - 2; })
+            .attr("x", 0)
+            .attr("y", function (d) { return main_y(d[0]) + 2; })
             .text(d => d[0])
             .attr("fill", "white")
             .attr("text-anchor", "end")
-            .attr("font-size", "11px")
-            .attr("dy", "11px")
+            .attr("font-size", "12px")
+            .attr("dy", "12px")
 
         const refresh_filter = function () {
             d3.selectAll(".circle").style("border", "none")
@@ -793,7 +795,7 @@ Promise.all([
                 );
             }
             hoveredPolygonId = null;
-            map.flyTo({ center: [40.137343, 25.137451], zoom: 2.5 });
+            map.flyTo({ center: [40.137343, 25.137451], zoom: 2.7 });
             // d3.select("#big_title").text("Conflict and Peace Process Map")
             d3.selectAll("#peace_process, #info")
                 .transition().duration(800)
