@@ -195,6 +195,7 @@ Promise.all([
     d3.csv("data/local_v8_1.csv"),
 ]).then(function (files) {
     let pax = files[0]
+    console.log(pax);
     //Filter & Sort agreement data
     pax = pax.filter((d, i) => d.Stage !== "Oth")
     pax.sort(function (a, b) {
@@ -295,7 +296,7 @@ Promise.all([
                 'type': 'circle',
                 'source': 'states',
                 'paint': {
-                    "circle-opacity": 0.7,
+                    "circle-opacity": 1,
                     "circle-stroke-width": 2,
                     'circle-radius': 7,
                     "circle-stroke-color":
@@ -314,9 +315,9 @@ Promise.all([
                             'Ceasefire',
                             '#df1f36',
                             'Framework-substantive, partial',
-                            '#3aae2a',
+                            '#fd8189',
                             'Implementation',
-                            '#7b8ad6',
+                            '#3aae2a',
                             'Renewal',
                             '#fd8189',
                             'Other',
@@ -436,10 +437,10 @@ Promise.all([
                             color_choice = '#df1f36'
                             break;
                         case "Framework-substantive, partial":
-                            color_choice = '#3aae2a'
+                            color_choice = '#fd8189'
                             break;
                         case "Implementation":
-                            color_choice = '#7b8ad6'
+                            color_choice = '#3aae2a'
                             break;
                         case "Renewal":
                             color_choice = '#fd8189'
