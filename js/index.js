@@ -735,27 +735,27 @@ Promise.all([
         // filter by stages
         d3.select(".pre").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Pre-negotiation"]);
         })
         d3.select(".cea").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Ceasefire"]);
         })
         d3.select(".par").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Framework-substantive, partial"]);
         })
         d3.select(".imp").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Implementation"]);
         })
         d3.select(".oth").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Other"]);
         })
 

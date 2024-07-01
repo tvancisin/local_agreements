@@ -725,7 +725,7 @@ input[type="radio"] {
 }
 
 
-label {
+#lbl {
     display: block;
     cursor: pointer;
 }
@@ -763,6 +763,8 @@ form {
 }
 
 .legend .circle {
+    position: relative;
+    top: 3px;
     width: 15px;
     height: 15px;
     border-radius: 50%;
@@ -809,26 +811,73 @@ h4 {
     text-align: center;
 }
 
-/* Tooltip text */
 .tooltiptext {
     visibility: hidden;
     width: 300px;
     background-color: black;
     color: #fff;
-    text-align: center;
+    text-align: left;
     padding: 5px 0;
     border-radius: 5px;
-
-    /* Position the tooltip text - see examples below! */
     position: absolute;
     left: 150px;
     z-index: 999;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
 label:hover .tooltiptext {
     visibility: visible;
 }
+
+.tooltiptextlabel {
+    visibility: hidden;
+    width: 300px; /* Adjust width as needed */
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    left: 60%;
+    z-index: 1;
+    bottom: 45px; /* Position the tooltip above the text */
+    margin-left: -150px; /* Use half of the tooltip's width to center it */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltiptextlabel1 {
+    visibility: visible;
+    opacity: 1;
+    left: 30%;
+}
+
+.tooltip-container:hover .tooltiptextlabel2 {
+    visibility: visible;
+    opacity: 1;
+    left: 40%;
+}
+
+.tooltip-container:hover .tooltiptextlabel3 {
+    visibility: visible;
+    opacity: 1;
+    left: 50%;
+}
+
+.tooltip-container:hover .tooltiptextlabel4 {
+    visibility: visible;
+    opacity: 1;
+    left: 70%;
+}
+
+.tooltip-container:hover .tooltiptextlabel5 {
+    visibility: visible;
+    opacity: 1;
+    left: 80%;
+}
+
+
+
+
 
 input {
     cursor: pointer;
