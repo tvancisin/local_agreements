@@ -36,6 +36,13 @@ d3.select("#links")
 d3.select("#chart").style("left", screen_width30 + "px")
 // d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
 d3.selectAll("#main_timeline").style("height", details_height - (details_height / 5) - 110 + "px")
+d3.select("#codebook")
+    .style("width", screen_width * 0.4 + "px")
+    .style("right", - screen_width * 0.4 + "px")
+
+d3.select("iframe").style("width", screen_width * 0.4 + "px")
+    .style("height", details_height + "px")
+
 
 const stable_height = (details_height - 16) * 0.45;
 const parseTime = d3.timeParse("%Y-%m-%d");
@@ -126,6 +133,8 @@ d3.select("#bee_time_btn").on("click", function () {
 
 // filters dis/appear
 let counter = 0;
+let counter_collab = 0;
+let code_counter = 0;
 d3.select("#filter_button").on("click", function () {
     counter += 1;
     if (counter % 2 !== 0) {
@@ -151,12 +160,15 @@ d3.select("#filter_button").on("click", function () {
 })
 
 // info button dis/appear
-let counter_collab = 0;
 d3.select("#info_button").on("click", function () {
     counter_collab += 1;
-    d3.selectAll("#peace_process")
+    d3.select("#peace_process")
         .transition().duration(800)
         .style("right", - screen_width * 0.30 + "px")
+    d3.select("#codebook")
+        .transition().duration(800)
+        .style("right", - screen_width * 0.40 + "px")
+    code_counter = 0
     if (counter_collab % 2 !== 0) {
         d3.select("#info")
             .transition().duration(500)
@@ -168,6 +180,27 @@ d3.select("#info_button").on("click", function () {
             .style("right", - screen_width * 0.30 + "px")
     }
 })
+
+// code button dis/appear
+d3.select("#code_button").on("click", function () {
+    console.log("gere");
+    code_counter += 1;
+    d3.selectAll("#peace_process, #info")
+        .transition().duration(800)
+        .style("right", - screen_width * 0.3 + "px")
+    counter_collab = 0
+    if (code_counter % 2 !== 0) {
+        d3.select("#codebook")
+            .transition().duration(500)
+            .style("right", 5 + "px")
+    }
+    else {
+        d3.select("#codebook")
+            .transition().duration(500)
+            .style("right", - screen_width * 0.4 + "px")
+    }
+})
+
 
 // load mapbox
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg';
@@ -678,7 +711,7 @@ Promise.all([
             .text(d => d[1].length)
             .attr("fill", "white")
             .attr("font-size", "10px")
-            // .attr("dy", "4px")
+        // .attr("dy", "4px")
 
         main_timeline.append("g")
             .selectAll("mybar_text_year")
@@ -690,7 +723,7 @@ Promise.all([
             .attr("fill", "white")
             .attr("text-anchor", "end")
             .attr("font-size", "11px")
-            // .attr("dy", "12px")
+        // .attr("dy", "12px")
 
         const refresh_filter = function () {
             d3.selectAll(".circle").style("border", "none")
@@ -812,7 +845,11 @@ Promise.all([
             d3.selectAll("#peace_process, #info")
                 .transition().duration(800)
                 .style("right", - screen_width * 0.30 + "px")
+            d3.select("#codebook")
+                .transition().duration(800)
+                .style("right", - screen_width * 0.40 + "px")
             counter_collab = 0;
+            code_counter = 0;
             map.setFilter('population', null)
         })
     })

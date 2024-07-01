@@ -233,6 +233,24 @@ h5 {
     border-radius: 2px;
 }
 
+#code_button {
+    position: absolute;
+    top: 5px;
+    right: 125px;
+    background-color: #fdd900;
+    border: none;
+    color: black;
+    padding: 5px 15px;
+    text-align: center;
+    font-size: 20px;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+
+
 #filter_button {
     position: absolute;
     top: 20px;
@@ -290,6 +308,7 @@ h5 {
 @media (max-width: 1024px) {
 
     #info_button,
+    #code_button,
     #refresh_button {
         font-size: 14px;
         padding: 5px 15px;
@@ -298,9 +317,14 @@ h5 {
 
 @media (max-width: 1024px) {
     #info_button {
-        font-size: 14px;
-        padding: 5px 15px;
         right: 53px
+    }
+}
+
+@media (max-width: 1024px) {
+    #code_button {
+        right: 94px;
+        padding: 5px 13px;
     }
 }
 
@@ -310,7 +334,8 @@ h5 {
 #mini_refresh_button:hover,
 #mini_refresh:hover,
 #info_button:hover,
-#filter_button:hover {
+#filter_button:hover,
+#code_button:hover {
     background-color: #AA4197;
     color: white;
 }
@@ -371,7 +396,8 @@ pre a:-webkit-any-link {
     box-shadow: 0 0 3px #4e4a69; */
 }
 
-#info {
+#info,
+#codebook {
     overflow: hidden;
     color: white;
     position: absolute;
@@ -383,6 +409,11 @@ pre a:-webkit-any-link {
     /* -webkit-box-shadow: 0 0 3px #3d3a52;
     box-shadow: 0 0 3px #4e4a69; */
 }
+
+iframe {
+    border: none;
+}
+
 
 #info_content,
 #peace_content {
@@ -689,7 +720,7 @@ input[type="radio"] {
 
 @media (max-width: 1024px) {
     input[type="radio"] {
-    vertical-align: text-bottom;
+        vertical-align: text-bottom;
     }
 }
 
@@ -762,7 +793,7 @@ form {
 
 span {
     margin: auto;
-    font-size: 12px;
+    font-size: 14px;
     left: 10px;
 }
 
