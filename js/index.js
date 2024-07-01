@@ -296,8 +296,8 @@ Promise.all([
                 'type': 'circle',
                 'source': 'states',
                 'paint': {
-                    "circle-opacity": 1,
-                    "circle-stroke-width": 2,
+                    "circle-opacity": 0.8,
+                    "circle-stroke-width": 1.5,
                     'circle-radius': 7,
                     "circle-stroke-color":
                         [
