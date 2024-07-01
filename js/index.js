@@ -17,20 +17,20 @@ else {
 
 const margin = { top: 10, right: 20, bottom: 10, left: 20 },
     width = screen_width30 - margin.left - margin.right,
-    height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
+    height = (details_height - 50) * 0.45 - margin.top - margin.bottom;
 
 //adjust height and width
 d3.selectAll("#peace_process, #info")
-    .style("height", details_height + "px")
+    // .style("height", details_height + "px")
     .style("width", screen_width30 + "px")
     .style("right", - screen_width30 + "px")
 d3.selectAll("#filters")
-    .style("height", details_height - 35 + "px")
+    // .style("height", details_height - 35 + "px")
     .style("width", screen_width * 0.2 + "px")
     .style("left", - (screen_width * 0.2 + 20) + "px")
 d3.select("#info_content").style("height", details_height - 90 + "px")
 d3.selectAll(".third")
-    .style("height", (details_height - 60) * 0.45 + "px")
+    .style("height", (details_height - 90) * 0.45 + "px")
 d3.select("#links")
     .style("height", details_height * 0.11 + "px")
 d3.select("#chart").style("left", screen_width30 + "px")
