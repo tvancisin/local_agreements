@@ -65,6 +65,13 @@ body {
 
 }
 
+
+@media (max-width: 1024px) {
+    #header {
+        height: 35px;
+    }
+}
+
 #title_img {
     position: absolute;
     top: 0px;
@@ -79,12 +86,34 @@ body {
     height: 45px;
 }
 
+@media (max-width: 1024px) {
+
+    #title_img,
+    #local_img {
+        height: 35px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #local_img {
+        left: 120px;
+    }
+}
+
+
 h3 {
     color: white;
     margin: auto;
     background-color: black;
     padding: 4px;
     text-align: center;
+}
+
+
+@media (max-width: 1024px) {
+    h3 {
+        font-size: 14px;
+    }
 }
 
 #process_stage,
@@ -122,6 +151,15 @@ h3 {
 h5 {
     margin-top: 5px;
     margin-bottom: 5px;
+    text-align: center;
+    color: white;
+}
+
+
+@media (max-width: 1024px) {
+    h5 {
+        font-size: 12px;
+    }
 }
 
 #bee_time_btn {
@@ -171,6 +209,14 @@ h5 {
     cursor: pointer;
 }
 
+
+@media (max-width: 1024px) {
+    #mini_refresh_button {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
 #info_button {
     position: absolute;
     top: 5px;
@@ -211,6 +257,14 @@ h5 {
     font-weight: bold;
 }
 
+
+@media (max-width: 1024px) {
+    #filter_button {
+        font-size: 12px;
+        padding: 5px 15px;
+    }
+}
+
 #mini_refresh {
     display: inline-block;
     background-color: #fdd900;
@@ -224,6 +278,32 @@ h5 {
     font-size: 14px;
     cursor: pointer;
 }
+
+
+@media (max-width: 1024px) {
+    #mini_refresh {
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 1024px) {
+
+    #info_button,
+    #refresh_button {
+        font-size: 14px;
+        padding: 5px 15px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #info_button {
+        font-size: 14px;
+        padding: 5px 15px;
+        right: 53px
+    }
+}
+
 
 #bee_time_btn:hover,
 #refresh_button:hover,
@@ -251,6 +331,13 @@ h1 {
     color: white;
     margin: auto;
 }
+
+@media (max-width: 1024px) {
+    h1 {
+        font-size: 1.5em;
+    }
+}
+
 
 a:-webkit-any-link:hover {
     color: red;
@@ -344,8 +431,13 @@ p {
     font-size: 14px;
 }
 
+@media (max-width: 1024px) {
+    p {
+        font-size: 10px;
+    }
+}
+
 #filter_title {
-    font-size: 14px;
     margin: auto;
 }
 
@@ -398,7 +490,12 @@ p {
     background-color: #171d26;
     font-size: 14px;
     margin: 3px;
+}
 
+@media (max-width: 1024px) {
+    #info_content {
+        font-size: 10px;
+    }
 }
 
 #info_content::-webkit-scrollbar {
@@ -421,9 +518,9 @@ p {
 }
 
 
-#img_text {
+/* #img_text {
     font-size: 12px;
-}
+} */
 
 #krava {
     position: relative;
@@ -434,19 +531,19 @@ p {
 }
 
 #first_link:link {
-    color: green;
+    color: yellow;
     background-color: transparent;
     text-decoration: none;
 }
 
 #first_link:visited {
-    color: steelblue;
+    color: yellow;
     background-color: transparent;
     text-decoration: none;
 }
 
 #first_link:hover {
-    color: yellow;
+    color: steelblue;
     background-color: transparent;
     text-decoration: none;
 }
@@ -587,17 +684,29 @@ a {
 }
 
 input[type="radio"] {
-    vertical-align: bottom;
+    vertical-align: text-top;
 }
+
+@media (max-width: 1024px) {
+    input[type="radio"] {
+    vertical-align: text-bottom;
+    }
+}
+
 
 label {
     display: block;
-    margin-bottom: 5px;
     cursor: pointer;
 }
 
 form {
-    font-size: 12px;
+    font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+    form {
+        font-size: 10px;
+    }
 }
 
 .legend {
@@ -613,6 +722,13 @@ form {
     bottom: -1px;
     left: -1px;
     padding-left: 10px;
+}
+
+
+@media (max-width: 1024px) {
+    .legend {
+        padding: 0px;
+    }
 }
 
 .legend .circle {
@@ -648,6 +764,13 @@ span {
     margin: auto;
     font-size: 12px;
     left: 10px;
+}
+
+
+@media (max-width: 1024px) {
+    span {
+        font-size: 10px;
+    }
 }
 
 

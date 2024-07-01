@@ -4,6 +4,17 @@ let screen_width = window.innerWidth;
 let screen_width30 = screen_width * 0.3;
 let details_height = screen_height - 50;
 
+let adjust_zoom, circle_size;
+
+if (screen_width <= 1024) {
+    adjust_zoom = 2;
+    circle_size = 5;
+}
+else {
+    adjust_zoom = 2.5;
+    circle_size = 7;
+}
+
 const margin = { top: 10, right: 20, bottom: 10, left: 20 },
     width = screen_width30 - margin.left - margin.right,
     height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
@@ -23,7 +34,7 @@ d3.selectAll(".third")
 d3.select("#links")
     .style("height", details_height * 0.11 + "px")
 d3.select("#chart").style("left", screen_width30 + "px")
-d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
+// d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
 d3.selectAll("#main_timeline").style("height", details_height - (details_height / 5) - 110 + "px")
 
 const stable_height = (details_height - 16) * 0.45;
@@ -166,7 +177,7 @@ const map = new mapboxgl.Map({
     // style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
     style: 'mapbox://styles/sashagaribaldy/clxstrxes00qv01pf8dgl4o20',
     center: [40.137343, 25.137451],
-    zoom: 2.7,
+    zoom: adjust_zoom,
     pitch: 10, // pitch in degrees
     attributionControl: false,
     logoPosition: "bottom-right"
@@ -298,7 +309,7 @@ Promise.all([
                 'paint': {
                     "circle-opacity": 0.8,
                     "circle-stroke-width": 1.5,
-                    'circle-radius': 7,
+                    'circle-radius': circle_size,
                     "circle-stroke-color":
                         [
                             'case',
@@ -359,13 +370,13 @@ Promise.all([
             d3.select("#peace_title")
                 .html(description.p_process)
             d3.select("#process_stage")
-                .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
+                .html(`<h5 style="text-align: left;">Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
             d3.select("#agreement")
-                .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
+                .html(`<h5 style="text-align: left;">Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
             d3.select("#locale")
-                .html(`<h5>Locale: </h5>` + `<p>` + description.text + `</p>`)
+                .html(`<h5 style="text-align: left;">Locale: </h5>` + `<p>` + description.text + `</p>`)
             d3.select("#desc")
-                .html(`<h5>Description: </h5>` + `<p>` + description.description + `</p>`)
+                .html(`<h5 style="text-align: left;">Description: </h5>` + `<p>` + description.description + `</p>`)
 
             $("#linkie").attr('href', description.link);
             $("#linkie1").attr('href', description.link1);
@@ -796,7 +807,7 @@ Promise.all([
                 );
             }
             hoveredPolygonId = null;
-            map.flyTo({ center: [40.137343, 25.137451], zoom: 2.7 });
+            map.flyTo({ center: [40.137343, 25.137451], zoom: adjust_zoom });
             // d3.select("#big_title").text("Conflict and Peace Process Map")
             d3.selectAll("#peace_process, #info")
                 .transition().duration(800)
