@@ -6,7 +6,7 @@ let details_height = screen_height - 50;
 
 let adjust_zoom, circle_size;
 
-if (screen_width <= 1024) {
+if (screen_width <= 1290) {
     adjust_zoom = 2;
     circle_size = 5;
 }

@@ -66,7 +66,7 @@ body {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #header {
         height: 35px;
     }
@@ -86,7 +86,7 @@ body {
     height: 45px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
 
     #title_img,
     #local_img {
@@ -94,7 +94,7 @@ body {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #local_img {
         left: 120px;
     }
@@ -110,7 +110,7 @@ h3 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     h3 {
         font-size: 14px;
     }
@@ -156,7 +156,7 @@ h5 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     h5 {
         font-size: 12px;
     }
@@ -210,7 +210,7 @@ h5 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #mini_refresh_button {
         font-size: 10px;
         padding: 3px 6px;
@@ -276,7 +276,7 @@ h5 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #filter_button {
         font-size: 12px;
         padding: 5px 15px;
@@ -298,14 +298,14 @@ h5 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #mini_refresh {
         font-size: 12px;
     }
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
 
     #info_button,
     #code_button,
@@ -315,13 +315,13 @@ h5 {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #info_button {
         right: 53px
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #code_button {
         right: 94px;
         padding: 5px 13px;
@@ -357,7 +357,7 @@ h1 {
     margin: auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     h1 {
         font-size: 1.5em;
     }
@@ -462,7 +462,7 @@ p {
     font-size: 14px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     p {
         font-size: 10px;
     }
@@ -523,7 +523,7 @@ p {
     margin: 3px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     #info_content {
         font-size: 10px;
     }
@@ -718,7 +718,7 @@ input[type="radio"] {
     vertical-align: text-top;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     input[type="radio"] {
         vertical-align: text-bottom;
     }
@@ -734,7 +734,7 @@ form {
     font-size: 14px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     form {
         font-size: 10px;
     }
@@ -756,7 +756,7 @@ form {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     .legend {
         padding: 0px;
     }
@@ -800,7 +800,7 @@ span {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1290px) {
     span {
         font-size: 10px;
     }
@@ -874,10 +874,6 @@ label:hover .tooltiptext {
     opacity: 1;
     left: 80%;
 }
-
-
-
-
 
 input {
     cursor: pointer;
