@@ -1,12 +1,17 @@
 //adapt to screen
+let header_height = $("#header").height()
 let screen_height = window.innerHeight;
 let screen_width = window.innerWidth;
 let screen_width30 = screen_width * 0.3;
-let details_height = screen_height - 50;
+let details_height = screen_height - header_height;
 
 let adjust_zoom, circle_size;
 
-if (screen_width <= 1290) {
+if (screen_width <= 1450) {
+    adjust_zoom = 2.2;
+    circle_size = 6;
+}
+else if (screen_width <= 1024) {
     adjust_zoom = 2;
     circle_size = 5;
 }
@@ -211,7 +216,6 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/sashagaribaldy/clxstrxes00qv01pf8dgl4o20',
     center: [40.137343, 25.137451],
     zoom: adjust_zoom,
-    pitch: 10, // pitch in degrees
     attributionControl: false,
     logoPosition: "bottom-right"
 });
