@@ -1,30 +1,53 @@
 //adapt to screen
+let header_height = $("#header").height()
 let screen_height = window.innerHeight;
 let screen_width = window.innerWidth;
 let screen_width30 = screen_width * 0.3;
-let details_height = screen_height - 50;
+let details_height = screen_height - header_height;
+
+let adjust_zoom, circle_size;
+
+if (screen_width <= 1450) {
+    adjust_zoom = 2.2;
+    circle_size = 6;
+}
+else if (screen_width <= 1024) {
+    adjust_zoom = 2;
+    circle_size = 5;
+}
+else {
+    adjust_zoom = 2.5;
+    circle_size = 7;
+}
 
 const margin = { top: 10, right: 20, bottom: 10, left: 20 },
     width = screen_width30 - margin.left - margin.right,
-    height = (details_height - 30) * 0.45 - margin.top - margin.bottom;
+    height = (details_height - 50) * 0.45 - margin.top - margin.bottom;
 
 //adjust height and width
 d3.selectAll("#peace_process, #info")
-    .style("height", details_height + "px")
+    // .style("height", details_height + "px")
     .style("width", screen_width30 + "px")
     .style("right", - screen_width30 + "px")
 d3.selectAll("#filters")
-    .style("height", details_height - 35 + "px")
+    // .style("height", details_height - 35 + "px")
     .style("width", screen_width * 0.2 + "px")
     .style("left", - (screen_width * 0.2 + 20) + "px")
 d3.select("#info_content").style("height", details_height - 90 + "px")
 d3.selectAll(".third")
-    .style("height", (details_height - 60) * 0.45 + "px")
+    .style("height", (details_height - 90) * 0.45 + "px")
 d3.select("#links")
     .style("height", details_height * 0.11 + "px")
 d3.select("#chart").style("left", screen_width30 + "px")
-d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
+// d3.selectAll(".filter_local").style("height", details_height / 5 - 22 + "px")
 d3.selectAll("#main_timeline").style("height", details_height - (details_height / 5) - 110 + "px")
+d3.select("#codebook")
+    .style("width", screen_width * 0.4 + "px")
+    .style("right", - screen_width * 0.4 + "px")
+
+d3.select("iframe").style("width", screen_width * 0.4 + "px")
+    .style("height", details_height + "px")
+
 
 const stable_height = (details_height - 16) * 0.45;
 const parseTime = d3.timeParse("%Y-%m-%d");
@@ -115,6 +138,8 @@ d3.select("#bee_time_btn").on("click", function () {
 
 // filters dis/appear
 let counter = 0;
+let counter_collab = 0;
+let code_counter = 0;
 d3.select("#filter_button").on("click", function () {
     counter += 1;
     if (counter % 2 !== 0) {
@@ -140,12 +165,15 @@ d3.select("#filter_button").on("click", function () {
 })
 
 // info button dis/appear
-let counter_collab = 0;
 d3.select("#info_button").on("click", function () {
     counter_collab += 1;
-    d3.selectAll("#peace_process")
+    d3.select("#peace_process")
         .transition().duration(800)
         .style("right", - screen_width * 0.30 + "px")
+    d3.select("#codebook")
+        .transition().duration(800)
+        .style("right", - screen_width * 0.40 + "px")
+    code_counter = 0
     if (counter_collab % 2 !== 0) {
         d3.select("#info")
             .transition().duration(500)
@@ -158,6 +186,27 @@ d3.select("#info_button").on("click", function () {
     }
 })
 
+// code button dis/appear
+d3.select("#code_button").on("click", function () {
+    console.log("gere");
+    code_counter += 1;
+    d3.selectAll("#peace_process, #info")
+        .transition().duration(800)
+        .style("right", - screen_width * 0.3 + "px")
+    counter_collab = 0
+    if (code_counter % 2 !== 0) {
+        d3.select("#codebook")
+            .transition().duration(500)
+            .style("right", 5 + "px")
+    }
+    else {
+        d3.select("#codebook")
+            .transition().duration(500)
+            .style("right", - screen_width * 0.4 + "px")
+    }
+})
+
+
 // load mapbox
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg';
 const map = new mapboxgl.Map({
@@ -166,8 +215,7 @@ const map = new mapboxgl.Map({
     // style: 'mapbox://styles/sashagaribaldy/cls4l3gpq003k01r0fc2s04tv',
     style: 'mapbox://styles/sashagaribaldy/clxstrxes00qv01pf8dgl4o20',
     center: [40.137343, 25.137451],
-    zoom: 2.7,
-    pitch: 10, // pitch in degrees
+    zoom: adjust_zoom,
     attributionControl: false,
     logoPosition: "bottom-right"
 });
@@ -298,7 +346,7 @@ Promise.all([
                 'paint': {
                     "circle-opacity": 0.8,
                     "circle-stroke-width": 1.5,
-                    'circle-radius': 7,
+                    'circle-radius': circle_size,
                     "circle-stroke-color":
                         [
                             'case',
@@ -359,13 +407,13 @@ Promise.all([
             d3.select("#peace_title")
                 .html(description.p_process)
             d3.select("#process_stage")
-                .html(`<h5>Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
+                .html(`<h5 style="text-align: left;">Stage of Process: </h5>` + `<p>` + description.stage + `</p>`)
             d3.select("#agreement")
-                .html(`<h5>Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
+                .html(`<h5 style="text-align: left;">Agreement: </h5>` + `<p>` + description.agreement + ` (` + description.datum + `)` + `</p>`)
             d3.select("#locale")
-                .html(`<h5>Locale: </h5>` + `<p>` + description.text + `</p>`)
+                .html(`<h5 style="text-align: left;">Locale: </h5>` + `<p>` + description.text + `</p>`)
             d3.select("#desc")
-                .html(`<h5>Description: </h5>` + `<p>` + description.description + `</p>`)
+                .html(`<h5 style="text-align: left;">Description: </h5>` + `<p>` + description.description + `</p>`)
 
             $("#linkie").attr('href', description.link);
             $("#linkie1").attr('href', description.link1);
@@ -667,7 +715,7 @@ Promise.all([
             .text(d => d[1].length)
             .attr("fill", "white")
             .attr("font-size", "10px")
-            // .attr("dy", "4px")
+        // .attr("dy", "4px")
 
         main_timeline.append("g")
             .selectAll("mybar_text_year")
@@ -679,7 +727,7 @@ Promise.all([
             .attr("fill", "white")
             .attr("text-anchor", "end")
             .attr("font-size", "11px")
-            // .attr("dy", "12px")
+        // .attr("dy", "12px")
 
         const refresh_filter = function () {
             d3.selectAll(".circle").style("border", "none")
@@ -691,27 +739,27 @@ Promise.all([
         // filter by stages
         d3.select(".pre").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Pre-negotiation"]);
         })
         d3.select(".cea").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Ceasefire"]);
         })
         d3.select(".par").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Framework-substantive, partial"]);
         })
         d3.select(".imp").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Implementation"]);
         })
         d3.select(".oth").on("click", function () {
             refresh_filter();
-            d3.select(this).style("border", "solid")
+            d3.select(this).style("border", "solid 1px")
             map.setFilter('population', ['==', 'stage', "Other"]);
         })
 
@@ -796,12 +844,16 @@ Promise.all([
                 );
             }
             hoveredPolygonId = null;
-            map.flyTo({ center: [40.137343, 25.137451], zoom: 2.7 });
+            map.flyTo({ center: [40.137343, 25.137451], zoom: adjust_zoom });
             // d3.select("#big_title").text("Conflict and Peace Process Map")
             d3.selectAll("#peace_process, #info")
                 .transition().duration(800)
                 .style("right", - screen_width * 0.30 + "px")
+            d3.select("#codebook")
+                .transition().duration(800)
+                .style("right", - screen_width * 0.40 + "px")
             counter_collab = 0;
+            code_counter = 0;
             map.setFilter('population', null)
         })
     })
