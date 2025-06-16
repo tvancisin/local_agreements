@@ -240,16 +240,16 @@ $('#box4').click(function () {
 
 // load the data
 Promise.all([
-    d3.csv("data/pax_local_v9.csv"),
+    d3.csv("data/pax_local_map_v9.csv"),
 ]).then(function (files) {
     let pax = files[0]
-    console.log(pax);
     //Filter & Sort agreement data
     pax = pax.filter((d, i) => d.Stage !== "Oth")
     pax.sort(function (a, b) {
         function getDate(d) { return parseTime(d.Dat) }
         return getDate(a) - getDate(b)
     })
+    console.log(pax);
 
     //Create Objects for Agreements in the same process
     var messy_data = {
